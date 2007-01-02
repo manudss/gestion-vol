@@ -1,0 +1,7 @@
+ecrire dans le ".h" :
+
+#define DBG printf("DEBUG File: %s Line:%d",__FILE__,__LINE__);
+
+apres , il suffit d'utiliser "DBG" n'importe ou pour l'utiliser !
+
+ca sert bien ! :)
