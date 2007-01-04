@@ -8,6 +8,7 @@
 * 
 * @return cle	un poineteur vers la chaine contenant la clé
 * @commentaires calculs lourds a cause du type "long" du tel.. ne presente cependant aucun bug !
+*                  le tel , doit etre de la forme 123456789 si on met un zero , cela ne passe plus !
 */
 
 char* gen_cle(t_client a)
