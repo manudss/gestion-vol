@@ -1,6 +1,8 @@
 #ifndef PILE_H
 # define PILE_H
 
+#define DBG printf("DEBUG File: %s Line:%d \n",__FILE__,__LINE__);
+
 /** @struct  t_adresse
 * @brief Structure d'une adresse
 * @version 1.0
@@ -43,8 +45,6 @@ typedef struct t_client
 	// Compagnie
 	struct t_ff *ff;						// Liens vers Fréquent Flyer, NULL si pas fréquent flyer
 	struct t_historique_vols *vols;						// Liens vers l'historique des vols en cours , NULL si aucun vols
-	// suiv
-    struct t_client *suiv; 					//célule suivante
 
 }t_client;
 
@@ -66,9 +66,6 @@ typedef struct t_ff
 	long km;  // Les kilomètres éffectués
 	struct t_historique_vols *vols;  // Pointeur vers une liste chainée des vols éffectués
 
-	// suiv
-    struct t_ff *suiv; 					//celule suivante
-
 }t_ff;
 
 /** @struct  t_vols_cours
@@ -84,8 +81,6 @@ typedef struct t_vols_cours
 {
     char cle[11];   // Les Deux premières lettres du prénom + les deux premières du nom + 4 derniers chiffres du numéro de tél +  FF si frequent flyer NN si non fréquent Flyer + 1 chiffre pour éviter les doublons
 	struct t_historique_vols *vols;  // Pointeur vers une liste chainée des vols éffectués
-	// suiv
-    struct t_vols_cours *suiv; 					//celule suivante
 }t_vols_cours;
 
  /** @struct  t_historique_vols
@@ -100,8 +95,6 @@ typedef struct t_vols_cours
 typedef struct t_historique_vols
 {
     char num_vol[12];   // le numéro de vol (desorihhmm) + jour
-	// suiv
-    struct t_historique_vols *suiv; 					//célule suivante
 
 }t_historique_vols;
 
@@ -119,12 +112,9 @@ typedef struct t_avions
     char modele[4];   	// le modèle de l'avion A380; B747; .....
 	long capacite;		// Le nombre de siege dans l'avion
 	long autonomie;		// L'autonomie de l'avion ( le nombre de kilomètre maximale)
-	// suiv
-    struct t_avions *suiv; 					//célule suivante
-
 }t_avions;
 
-typedef t_avions* ptr_t_avions;  // pointeur vers une destination
+typedef t_avions* ptr_t_avions;  // pointeur vers un avion
 
 /** @struct  t_destination
 * @brief liste chainée des destinations
@@ -141,8 +131,6 @@ typedef struct t_destination
 	char *destination;	// Le nom de la destination
 	char *origine;		// Le nom de l'origine
 	long distance;		// La distance entre les deux
-	// suiv
-    struct t_destination *suiv; 					//célule suivante
 
 }t_destination;
 
@@ -198,4 +186,35 @@ typedef struct t_vols
 
 }t_vols;
 
+/** @struct  element
+* @brief structure d'une liste chainée générale
+*
+* @param
+*
+*/
+
+typedef struct element element;
+struct element
+{
+    void *data;
+    struct element *suiv;
+};
+
+typedef struct donnee
+{
+    long data;
+}donnee;
+
+typedef element* llist;
+
+/** @struct  strucutre
+* @brief Une union permettant de stocké n'importe quel pointeur de structure
+*
+* @param
+*
+*/
+union listeuniversel {
+llist  listechaine;
+
+} listeuniversel;
 #endif
