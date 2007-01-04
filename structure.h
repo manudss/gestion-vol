@@ -5,7 +5,7 @@
 
 /** @struct  t_adresse
 * @brief Structure d'une adresse
-* @version 1.0
+* @version 1.0.1
 * @bug Y a pas
 * @warning Y a pas
 * @param
@@ -14,11 +14,11 @@
 
 typedef struct t_adresse
 {
-    long num;   // le numéro de rue
-	char *rue;  // le nom de la rue
-	long code_postal; // le code postal
+    
+	char *adresse;  // le nom de la rue
 	char *ville; // la ville
 	char *pays; //le pays
+	
 }t_adresse;
 
 
