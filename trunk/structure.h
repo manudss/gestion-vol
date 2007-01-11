@@ -14,11 +14,11 @@
 
 typedef struct t_adresse
 {
-    
+
 	char *adresse;  // le nom de la rue
 	char *ville; // la ville
 	char *pays; //le pays
-	
+
 }t_adresse;
 
 
@@ -185,6 +185,8 @@ typedef struct t_vols
 	int balance;
 
 }t_vols;
+
+typedef t_vols* ptr_t_vols;  // pointeur vers un vols
 
 /** @struct  element
 * @brief structure d'une liste chainée générale
