@@ -86,3 +86,39 @@ void afficherListe(llist liste, void *(afficher) (void *))
     }
  }
 
+
+//--------------------------- Fonction Recherche --------------------------------------------------------------//
+
+void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* achercher,void * chercherdans))
+{
+
+
+    element* tmp = liste;
+
+    int ok =0;
+	void * cherche = NULL;
+
+    while(tmp != NULL && ok != 1 )
+    {
+		cherche = fct_rech(achercher, liste.data);
+
+    	if(cherche != NULL) ok=1;
+		else liste = liste.suiv;
+
+    }
+    return cherche;
+}
+
+void * recherch_client_par_cle(void* achercher,void * chercherdans)
+{
+    char * cle;
+    ptr_t_client client;
+
+    cle = (char*) &achercher;
+    client = (ptr_client) chercherdans;
+
+    if (strcmp( chercherdans->cle , cle) )
+        return achercher;
+    else
+        return NULL;
+}
