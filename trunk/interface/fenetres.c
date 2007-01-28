@@ -1,13 +1,15 @@
+#include "../structure.h"
 #include "interface.h"
-
-int identification(client* tete)
+///////////////////////////////////////
+int identification(llist TDH[26][26])
 {
     
     /*Declaration et initialisation fenetre */
     
     Window_ident *pf;
+    
     GtkWidget *pLabel_cle;
-    GtkWidget *pLabel_mdp;
+    GtkWidget *pLabel_mot_de_passe;
     
     gtk_init(0,0);
     pf = g_malloc(sizeof(Window_ident));
@@ -19,17 +21,17 @@ int identification(client* tete)
     
     /* CREATION */
     
-    //creation zone de saisie: pour clé et mdp
+    //creation zone de saisie: pour clé et mot_de_passe
     pf->pcle = gtk_entry_new_with_max_length(11); //cle limitée a 11 caracteres.
-    pf->pmdp = gtk_entry_new ();
-    gtk_entry_set_visibility((GtkEntry*)(pf->pmdp),FALSE);
+    pf->pmot_de_passe = gtk_entry_new ();
+    gtk_entry_set_visibility((GtkEntry*)(pf->pmot_de_passe),FALSE);
     
     /* Creation des boutons */
     pf->pvalider= gtk_button_new_with_label("Valider");
     pf->pinscrire= gtk_button_new_with_label("S'inscrire");
     //Création Label
     pLabel_cle= gtk_label_new("Saisir cle :");
-    pLabel_mdp= gtk_label_new("Saisir mot de passe");
+    pLabel_mot_de_passe= gtk_label_new("Saisir mot de passe");
     pf->pLabel_info= gtk_label_new("Veuillez saisir vos identifiants \n(pour tester:cle= 'a', mdp= 'a'");   
     /* Creation et insertion de la table 7 lignes 2 colonne */
     pf->pTable=gtk_table_new(6,2,TRUE);
@@ -54,12 +56,12 @@ int identification(client* tete)
         GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
     //label mdp
-    gtk_table_attach(GTK_TABLE(pf->pTable), pLabel_mdp,
+    gtk_table_attach(GTK_TABLE(pf->pTable), pLabel_mot_de_passe,
         0, 1, 3, 4,
         GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
     //champ mdp
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pmdp,
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pmot_de_passe,
         0, 2, 4, 5,
         GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
@@ -77,9 +79,19 @@ int identification(client* tete)
         0, 0);
         
     
+    //printf("%s",(TDH[0][0]).cle);
+    //recopie de l'adresse de la TDH dans struct pf
     
-    //recopie de l'adresse de la liste clients ..
-    pf->liste=tete;
+    
+    pf->tabDH = TDH;
+    //printf("\nTDH = %ld\n",TDH);
+    //printf("\npf->tabDH = %s\n",(pf->tabDH+2+2*26)->cle);
+     
+    
+    
+    //printf("\npf->tabDH !!!!%s\t[OK]\n",(**pf->tabDH).cle);
+    
+    
     
     //On lance les CALLBACKS :
     //g_signal_connect(G_OBJECT(pf->pcle), "activate", G_CALLBACK(get_pEntry),(gpointer) pf); => je ne sais pas a quoi sa sert ! :)
@@ -100,8 +112,8 @@ int identification(client* tete)
 
     return EXIT_SUCCESS;
 }
-////////////////////////////////
-int f_principale(client* client)
+/////////////////////////////////////////////
+int f_principale(t_client* t_client)
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
@@ -114,7 +126,7 @@ int f_principale(client* client)
  gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
  gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 1100, 850);
  gtk_window_maximize((GtkWindow*)pf->pWindow);
- gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INTERFACE CLIENT");
+ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INTERFACE t_client");
  
  //menu:
  pf->pMenuBar= gtk_menu_bar_new();
@@ -136,8 +148,8 @@ int f_principale(client* client)
  pf->pff= gtk_button_new_with_label("FF ?");
  
  // créa pLabel
- pf->pLabel_bienvenue = gtk_label_new("Bienvenue sur votre interface client");
- pf->pLabel_msg = gtk_label_new(client->message);
+ pf->pLabel_bienvenue = gtk_label_new("Bienvenue sur votre interface t_client");
+ pf->pLabel_msg = gtk_label_new(t_client->message);
  
  /* Creation et insertion de la table 14 lignes 4 colonnes */
  pf->pTable=gtk_table_new(14,4,TRUE);
@@ -156,7 +168,7 @@ int f_principale(client* client)
  1, 3, 1, 2,
  0,0,
        0, 0);
- //message personnalisé du client ("client.message")
+ //message personnalisé du t_client ("t_client.message")
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel_msg,
  1, 3, 2, 5,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
@@ -198,11 +210,31 @@ GTK_EXPAND | GTK_FILL, GTK_EXPAND,
  
 return EXIT_SUCCESS;
 }
-
+//INSCRIPTION///////////********************************************
 void inscription(Window_ident *p,Window_ident *pf1)
 {
 InscrireWindow *pf;
+llist** tab;
+printf("1");
+tab = (pf1->tabDH);
+printf("2");
+/*pf->tabDH= (t_client*)malloc(sizeof(t_client));
+printf("3");
+pf->tabDH = tab;
+*/
+/*
 
+t_client a;
+
+const gchar* nom;
+const gchar* prenom;
+long num;
+const gchar* adresse;
+const gchar* pays;
+const gchar*mot_de_passe1;
+const gchar*mot_de_passe2;
+
+*/
 gtk_init(0,0);
  
 pf = g_malloc(sizeof(InscrireWindow));
@@ -217,23 +249,24 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  pf->pprenom=  gtk_entry_new ();
  pf->ptel=     gtk_entry_new ();
  pf->padresse= gtk_entry_new ();
+ pf->pville=   gtk_entry_new ();
  pf->ppays=    gtk_entry_new ();
- pf->pmdp=     gtk_entry_new ();
- pf->pmdp2=    gtk_entry_new ();
+ pf->pmot_de_passe=     gtk_entry_new ();
+ pf->pmot_de_passe2=    gtk_entry_new ();
  
- gtk_entry_set_visibility((GtkEntry*)(pf->pmdp),FALSE);
- gtk_entry_set_visibility((GtkEntry*)(pf->pmdp2),FALSE);
+ gtk_entry_set_visibility((GtkEntry*)(pf->pmot_de_passe),FALSE);
+ gtk_entry_set_visibility((GtkEntry*)(pf->pmot_de_passe2),FALSE);
  
  //creation bouton :
  pf->pvalider = gtk_button_new_with_label("Valider");
  
  /* Creation et insertion de la table 15 lignes 4 colonnes */
- pf->pTable=gtk_table_new(15,2,TRUE);
+ pf->pTable=gtk_table_new(17,2,TRUE);
  gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
  
- /*label: Bienvenue*/ pf->pLabel = gtk_label_new("Merci de remplir les champs suivant pour vous inscrire.");
- gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel,
- 0, 1, 0, 1,
+ /*label: Bienvenue*/ pf->pLabel_info = gtk_label_new("Merci de remplir les champs suivants pour vous inscrire.");
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel_info,
+ 0, 2, 0, 1,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  
@@ -285,55 +318,64 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  
- /*label: Pays*/ pf->pLabel = gtk_label_new("Pays");
+ /*label: Ville*/ pf->pLabel = gtk_label_new("Ville");
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel,
  0, 1, 9, 10,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  
+ /*Entry:Ville*/ 
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pville,
+ 0, 2, 10, 11,
+ GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
+       0, 0);
+ 
+ /*label: Pays*/ pf->pLabel = gtk_label_new("Pays");
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel,
+ 0, 1, 11, 12,
+ GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
+       0, 0);
+ 
  /*Entry:Pays*/ 
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->ppays,
- 0, 2, 10, 11,
+ 0, 2, 12, 13,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  
  /*label: Mdp*/ pf->pLabel = gtk_label_new("Mot de passe");
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel,
- 0, 1, 11, 12,
+ 0, 1, 13, 14,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  /*label: Mdp2*/ pf->pLabel = gtk_label_new("Reecrire le mot de passe");
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel,
- 1, 2, 11, 12,
+ 1, 2, 13, 14,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
  
- /*Entry:Mdp*/ 
- gtk_table_attach(GTK_TABLE(pf->pTable),pf->pmdp,
- 0, 1, 12, 13,
+ /*Entry:mot_de_passe*/ 
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pmot_de_passe,
+ 0, 1, 14, 15,
  0,GTK_EXPAND | GTK_FILL,
        0, 0);
- /*Entry:Mdp2*/ 
- gtk_table_attach(GTK_TABLE(pf->pTable),pf->pmdp2,
- 1, 2, 12, 13,
+ /*Entry:mot_de_passe2*/ 
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pmot_de_passe2,
+ 1, 2, 14, 15,
  0,GTK_EXPAND | GTK_FILL,
        0, 0);
  
  /*Bouton: valider*/ 
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pvalider,
- 1, 2, 13, 15,
+ 1, 2, 15, 17,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        30, 10);
        
  
  
  
- 
- 
- 
  /*Callbacks: */
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0); 
- 
+ g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(inscrire),(gpointer*) pf);
  /* Affichage de la fenetre */
  gtk_widget_show_all(pf->pWindow);
 
