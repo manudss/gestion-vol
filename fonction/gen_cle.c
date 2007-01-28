@@ -1,3 +1,5 @@
+#include "../structure.h"
+
 /**
 * @brief fonction generant la clé a partir d'un client
 * 

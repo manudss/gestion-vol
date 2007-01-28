@@ -1,34 +1,32 @@
-#include "interface.h"
+#include "structure.h"
+#include "liste/liste.h"
+#include "avl/avl.h"
 
 int main()
 {
-//Creation liste chainée bidon pour tester autentification ( a creer plus tard avec le fichier  client;))
+	llist *listeclient = NULL;
+	llist listeavion = NULL;
+	llist listedestination = NULL;
+	ptr_t_vols *arbrevol = NULL;
 
-//Creation & initialisation de 3 clients(bidon):
-client a,b,c;
-client *tete;
-//client a :
-a.cle="a";
-a.mdp="a";
-a.message="MESSAGE : Vous etes le client 'a'";
-//client b :
-b.cle="b";
-b.mdp="b";
-b.message="MESSAGE : Vous etes le client 'b'";
-//client c :
-c.cle="c";
-c.mdp="c";
-c.message="MESSAGE : Vous etes le client 'c'";
-//chainage :
-tete=&a;
-a.suiv = &(b);
-b.suiv= &(c);
-c.suiv=NULL;
+	if ((listeclient = init_listeclient()) == NULL)
+        exit (2);
+	chargement("listeclient.csv", (void *) &ajout_client, (void *) listeclient, NULL);
+	listeavion = chargement("listeavion.csv", (void *) &ajout_avion, (void *) listeavion, NULL);
+	listedestination = chargement("listedestination.csv", (void *) &ajout_destination, (void *) listedestination, NULL);
+	chargement("listeFF.csv", (void *) &ajout_FF, (void *) listeclient, NULL);
+	chargement("listevolsencours.csv", (void *) &ajout_vols_en_cours, (void *) listeclient, NULL);
+	chargement("listevols.csv", (void *) &ajout_vols, (void *) &arbrevol, NULL);
 
 
-//lancement interface graphique (fenetre connexion)
-identification(tete);
+    afficherListe(listeclient[hachage("DE")], &affiche_client);
+    afficherListe(listeavion, &affiche_avion);
+
+    //listeclient = effacerListe(listeclient, &freet_client);
+    listeavion = effacerListe(listeavion, &freet_avions);
 
 
-return 0;
+    system("pause");
+	return 0;
 }
+

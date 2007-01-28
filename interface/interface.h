@@ -1,17 +1,19 @@
 #ifndef Interface_H
 #define Interface_H
 
-#include <stdlib.h>
 #include <gtk/gtk.h>
-#include <string.h> //pour strcmp..
+ //pour strcmp..
 
+
+
+#define TAILLETDH 27
 //Struct
 /////////////////////////////
 typedef struct _ident_Window
 {
     //pEntry:
     GtkWidget *pcle; //clé
-    GtkWidget *pmdp; // mdp
+    GtkWidget *pmot_de_passe; // mdp
     
     GtkWidget *pvalider; //bouton
     GtkWidget *pinscrire; //bouton
@@ -22,7 +24,7 @@ typedef struct _ident_Window
     
     GtkWidget *pLabel_info; //label etat inscription.
     
-    struct client *liste;
+     struct llist** tabDH;
 }Window_ident;
 /////////////////////////////
 typedef struct _MainWindow
@@ -43,10 +45,10 @@ typedef struct _MainWindow
     GtkWidget *pff; // ff ?
     
     //label:
-    GtkWidget *pLabel_bienvenue; //bienvenu GENERIQUE
+    GtkWidget *pLabel_bienvenue; //bienvenue GENERIQUE
     GtkWidget *pLabel_msg;
     
-    struct client *liste;
+    struct t_client *liste;
     
 }MainWindow;
 ///////////////////////////////////
@@ -55,76 +57,76 @@ typedef struct _inscrire
 GtkWidget *pTable;//table
 GtkWidget *pWindow;//FENETRE
 GtkWidget *pLabel; //labels
+GtkWidget *pLabel_info;
 
 // Gtk_Entry :
 GtkWidget *pnom;
 GtkWidget *pprenom;
 GtkWidget *ptel;
 GtkWidget *padresse;
+GtkWidget *pville;
 GtkWidget *ppays;
-GtkWidget *pmdp;
-GtkWidget *pmdp2;
+GtkWidget *pmot_de_passe;
+GtkWidget *pmot_de_passe2;
 
 //Gtk_button :
 
 GtkWidget *pvalider;
-
-
+ 
+struct t_client* tabDH;
 }InscrireWindow;
 
-////////////////////////////////
-typedef struct client //struct bidon pour tester identification ..
-{
- char* cle;
- char* message;
- /*
- ...
- */
- char* mdp;
- struct client *suiv;
-}client;
 
-
-//protos :
+///////////////////protos : ///////////////////////////////////////
+int hachage1(char*);
+int hachage2(char*);
+///
 void OnQuitter(GtkWidget* , gpointer);
 void OnDestroy(GtkWidget* , gpointer);
  
 void verif_champs(Window_ident *, Window_ident* );
  /** @function verif_champs
-* @brief Recupere les deux champs et verifie qu'ils correspondent a un client (LC)
+* @brief Recupere les deux champs et verifie qu'ils correspondent a un t_client (LC)
 * @version 1.0
 * @bug 0 -> probleme dans le cas de caractère accentué/non standarts ..
 * @warning 0
 * @param 1er param : je ne le comprend pas !! mais il est necessaire ! le deuxieme , donne pf .
 * @return exit_success...
 *
-* On pourrait externaliser la partie de parcours de la liste chainée pour comparer la clé et le mdp au client...
+* On pourrait externaliser la partie de parcours de la liste chainée pour comparer la clé et le mdp au t_client...
 */
 
-int identification(client*);
+int identification(llist TDH[26][26] );
 /** @function identification
 * @brief fonction affichant la fenetre de connexion et callbacks
 * @version 1.0
 * @bug 0
 * @warning 0 
-* @param 1er param : recoit la liste des client de la fontion principale
+* @param 1er param : recoit la liste des t_client de la fontion principale
 * @return 0
 *
 * 
 */
-int f_principale(client*);
+void inscrire(InscrireWindow *,InscrireWindow *);
+
+int f_principale(t_client*);
 /** @function f_principale
 * @brief fonction affichant la fenetre principale + callbacks
 * @version 1.0
 * @bug 0
 * @warning 0 
-* @param 1er param : client* pour le message (pour l'instant!)/!\
+* @param 1er param : t_client* pour le message (pour l'instant!)/!\
 * @return 0
 *
 * 
 */
 
-const gchar* recup_chp(GtkWidget*);
-
+char* recup_chp(GtkWidget*);
 void inscription(Window_ident *,Window_ident *);
+//EXTERNES :
+
+char* gen_cle2(char* , char* , long , long );
+void * ajout_client(char* table_champ[], int , void * );
+llist ajouterEnTete(llist , void * );
+
 #endif

@@ -1,11 +1,17 @@
 #ifndef PILE_H
 # define PILE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
 #define DBG printf("DEBUG File: %s Line:%d \n",__FILE__,__LINE__);
+#define TAILLETDH 27
 
 /** @struct  t_adresse
 * @brief Structure d'une adresse
-* @version 1.0.1
+* @version 1.0
 * @bug Y a pas
 * @warning Y a pas
 * @param
@@ -49,6 +55,8 @@ typedef struct t_client
 }t_client;
 
 typedef t_client* ptr_t_client;
+
+typedef struct t_ff* ptr_t_ff;
 
  /** @struct  t_ff
 * @brief Structure pour les fréquent flyer
