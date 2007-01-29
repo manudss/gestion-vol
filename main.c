@@ -1,6 +1,7 @@
 #include "structure.h"
 #include "liste/liste.h"
 #include "avl/avl.h"
+#include "chargement/chargement.h"
 
 int main()
 {
@@ -8,6 +9,9 @@ int main()
 	llist listeavion = NULL;
 	llist listedestination = NULL;
 	ptr_t_vols *arbrevol = NULL;
+	int nbr;
+	ptr_t_vols *tab;
+    int i, n=0;
 
 	if ((listeclient = init_listeclient()) == NULL)
         exit (2);
@@ -18,15 +22,30 @@ int main()
 	chargement("listevolsencours.csv", (void *) &ajout_vols_en_cours, (void *) listeclient, NULL);
 	chargement("listevols.csv", (void *) &ajout_vols, (void *) &arbrevol, NULL);
 
+    printf("fin chargement");
 
-    afficherListe(listeclient[hachage("DE")], &affiche_client);
-    afficherListe(listeavion, &affiche_avion);
+    nbr = nbr_elmt(arbrevol);
+	 printf("nbr de champ %ld\n",nbr);
+    DBG
+    tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * nbr);
+    DBG
+    parcourttotab( arbrevol, tab, &n );
+
+    printf("nbr de champ \n");
+
+    for (i = 0; i < nbr; i ++)
+    {
+        printf("tab[%ld ]->code_vol : %s",i, tab [ i ]->code_vol);
+    }
+
+    //afficherListe(listeclient[hachage("DE")], &affiche_client);
+    //afficherListe(listeavion, &affiche_avion);
 
     //listeclient = effacerListe(listeclient, &freet_client);
-    listeavion = effacerListe(listeavion, &freet_avions);
+    //listeavion = effacerListe(listeavion, &freet_avions);
+    //vols(0,0);
+    //identification ((llist**)listeclient);
 
-
-    system("pause");
 	return 0;
 }
 

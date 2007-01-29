@@ -14,5 +14,9 @@ void copie_arbre(ptr_t_vols source, ptr_t_vols *destination);
 
 ptr_t_vols   init_listevols (char *codevol);
 
+int nbr_elmt(ptr_t_vols a);
+
+int parcourttotab(ptr_t_vols a, ptr_t_vols tab[], int *n );
+
 
 #endif

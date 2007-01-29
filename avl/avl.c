@@ -87,35 +87,40 @@ void rotationdroitegauche ( ptr_t_vols *A )
 
 int ajoutavl(ptr_t_vols x, ptr_t_vols *B)
 {
-    ptr_t_vols filsdroit = NULL;
     int		cmp = 0;
-    DBG
-    printf("listevol : %ld\n", (B));
+//    DBG
+	if (B == NULL)
+		printf("B == NULL\n");
+    else printf("listevol : %ld\n", (*B));
 	if ((*B) == NULL)
 	{
-		DBG
+//		DBG
 		*B = x;   // On  ajoute le lien
 		(*B)->balance = 0;
 		return 1;
 	}
 	else
 	{
-	    DBG
+//	    DBG
 	    printf("b->code_vol : %s\n", (*B)->code_vol);
 	    printf("x->code_vol : %s\n", x->code_vol);
-	    cmp = strcmp( x->code_vol, (*B)->code_vol );
+	    cmp = strcmp( x->code_vol, (*B)->code_vol);
+	    printf("cmp = %i", cmp);
+
 		if (cmp == 0 )  // Si il  existe déjà
 			return 0;						// on renvoie 0 pour dire qu'il existe déjà
 		else
 		{
-		DBG
+//		DBG
 			if ( cmp <  0 )
 			{
-				if ( ajoutavl(x, &(*B)->fg ) == 0 )
+//			    DBG
+				if ( ajoutavl(x, &((*B)->fg) ) == 0 )
 					return 0;
 				else
 				{
-					(*B)->balance = (*B)->balance + 1;
+//				    DBG
+				    (*B)->balance = (*B)->balance + 1;
 					if ( (*B)->balance == 2 )
 					{
 						if ( (*B)->fg->balance == 1 )
@@ -128,10 +133,13 @@ int ajoutavl(ptr_t_vols x, ptr_t_vols *B)
 			}
 			else
 			{
-				if ( ajoutavl(x, &(*B)->fd ) == 0 )
+			//	printf("b->fd : %ld", (*B)->fd );
+//				DBG
+				if ( ajoutavl(x, &((*B)->fd) ) == 0 )
 					return 0;
 				else
 				{
+//				    DBG
 					(*B)->balance = (*B)->balance - 1;
 					if ( (*B)->balance == -2 )
 					{
@@ -311,3 +319,40 @@ int main()
 	return 0;
 }
 */
+
+//Recherche par ordre
+int parcourttotab(ptr_t_vols a, ptr_t_vols tab[], int *n )
+{
+
+	 printf("n = %ld", *n);
+	 if( a != NULL)
+	 {
+		 printf("parcourttotab");
+		 parcourttotab(a->fg, tab, n);
+
+		 tab[*n] = a;
+
+		 printf("tab[%ld]->code_vol : %s\n",  *n , tab[ *n ]->code_vol);
+		 *n = *n + 1;
+		 n += parcourttotab(a->fd, tab, n);
+
+	 }
+
+
+}
+
+// Comptage du nombre d'élément
+int nbr_elmt(ptr_t_vols a)
+{
+	int nbr = 0;
+
+	if( a != NULL)
+    {
+	  	 nbr = nbr + nbr_elmt(a->fg);
+		 printf("nbr_elmt : %ld\n", nbr);
+	 	 nbr = nbr + nbr_elmt(a->fd);
+		 printf("nbr_elmt : %ld\n", nbr);
+		 return nbr + 1;
+	}
+	return 0;
+}

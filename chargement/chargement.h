@@ -21,6 +21,7 @@ void * ajout_avion(char* table_champ[], int nbr_champ, void * liste, void * list
 void * ajout_destination (char* table_champ[], int nbr_champ, void * liste, void * liste2);
 void * ajout_FF (char* table_champ[], int nbr_champ, void * liste, void * liste2);
 void * ajout_vols_en_cours (char* table_champ[], int nbr_champ, void * liste, void * liste2);
+void * ajout_vols (char* table_champ[], int nbr_champ, void * liste, void * liste2);
 llist *init_listeclient (void);
 
 
