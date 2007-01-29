@@ -4,13 +4,11 @@
 #include <gtk/gtk.h>
  //pour strcmp..
 
-
-
-#define TAILLETDH 27
 //Struct
 /////////////////////////////
 typedef struct _ident_Window
 {
+    
     //pEntry:
     GtkWidget *pcle; //clé
     GtkWidget *pmot_de_passe; // mdp
@@ -24,7 +22,7 @@ typedef struct _ident_Window
     
     GtkWidget *pLabel_info; //label etat inscription.
     
-     struct llist** tabDH;
+     llist** tabDH;
 }Window_ident;
 /////////////////////////////
 typedef struct _MainWindow
@@ -33,7 +31,8 @@ typedef struct _MainWindow
     GtkWidget *pTable;//table
     GtkWidget *pWindow;//FENETRE
     GtkWidget *pImage; //image
-    
+    GtkWidget *pScrollbar;
+    GtkWidget *pBox;
     //MENU :
     GtkWidget *pMenuBar; //menu-bar
     GtkWidget *pMenu;//sous menu
@@ -48,7 +47,7 @@ typedef struct _MainWindow
     GtkWidget *pLabel_bienvenue; //bienvenue GENERIQUE
     GtkWidget *pLabel_msg;
     
-    struct t_client *liste;
+//    struct t_client *liste;
     
 }MainWindow;
 ///////////////////////////////////
@@ -73,9 +72,21 @@ GtkWidget *pmot_de_passe2;
 
 GtkWidget *pvalider;
  
-struct t_client* tabDH;
-}InscrireWindow;
+llist** tabDH;
 
+}InscrireWindow;
+//////////////////VOLS/////////////////////
+typedef struct _vols
+{
+GtkWidget *pWindow;//FENETRE
+GtkWidget *pLabel; //labels
+GtkWidget *pTable; //table
+
+GtkWidget *pChoix[];//tableau de pointeur de boutons
+
+//GtkWidget *pScrollbar;//scrollbar
+
+}VolsWindow;
 
 ///////////////////protos : ///////////////////////////////////////
 int hachage1(char*);
@@ -96,7 +107,7 @@ void verif_champs(Window_ident *, Window_ident* );
 * On pourrait externaliser la partie de parcours de la liste chainée pour comparer la clé et le mdp au t_client...
 */
 
-int identification(llist TDH[26][26] );
+int identification(llist** );
 /** @function identification
 * @brief fonction affichant la fenetre de connexion et callbacks
 * @version 1.0
@@ -109,7 +120,7 @@ int identification(llist TDH[26][26] );
 */
 void inscrire(InscrireWindow *,InscrireWindow *);
 
-int f_principale(t_client*);
+int f_principale(ptr_t_client);
 /** @function f_principale
 * @brief fonction affichant la fenetre principale + callbacks
 * @version 1.0
@@ -120,6 +131,7 @@ int f_principale(t_client*);
 *
 * 
 */
+void vols(Window_ident *p,Window_ident *pf1);
 
 char* recup_chp(GtkWidget*);
 void inscription(Window_ident *,Window_ident *);

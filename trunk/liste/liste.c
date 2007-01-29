@@ -5,6 +5,7 @@
 
 
 
+
 llist ajouterEnTete(llist liste, void * valeur)
 {
     llist nouvelElement = malloc(sizeof(element));
@@ -85,10 +86,22 @@ void * affiche_avion (void * tmp)
 {
     ptr_t_avions avion;
     avion  = (ptr_t_avions) tmp;
+    puts(avion->modele);
+    printf("modele : %s\n",avion->modele);
+    printf("strlen modele : %ld", strlen(avion->modele));
+    printf("capacite : %ld\n",avion->capacite);
+    printf("autonomie : %ld\n",avion->autonomie);
+
+}
+
+void * affiche_dest (void * tmp)
+{
+    ptr_t_destination dest;
+    dest  = (ptr_t_destination) tmp;
     //puts(avion->modele);
-    printf("%ls\n",avion->modele);
-    printf("%ld\n",avion->capacite);
-    printf("%ld\n",avion->autonomie);
+    printf("dest->code = %s\n",dest->code);
+    printf("destination = %s\n",dest->destination);
+    printf("origine = %s\n",dest->origine);
 
 }
 
@@ -108,4 +121,3 @@ void afficherListe(llist liste, void *(afficher) (void *))
         tmp = tmp->suiv;
     }
  }
-

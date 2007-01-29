@@ -1,5 +1,8 @@
 #include "../structure.h"
 #include "chargement.h"
+#include "../recherche/recherche.h"
+
+
 
 /**
 * @brief fonction permettant de copier un morceau de chaine, dans un tableau de char.
@@ -15,7 +18,6 @@
 
 char* copie_chaine(int debut, int fin,char buffer[])
 {
-    int taille;
     int j;
     char tmp[TAILLE_MOT + 1];
     char *tmp2;
@@ -110,8 +112,7 @@ void * chargement(char * fichiercsv ,void * (ajout) (void *, int , void *), void
 void * ajout_client(char* table_champ[], int nbr_champ, void * liste, void * liste2)
 {
     ptr_t_client nouveau;
-    llist *listeclient;
-	llist *TDH;
+	llist *TDH = NULL;
 	int indice;
 
 	indice = hachage(table_champ[0]);
@@ -147,11 +148,11 @@ void * ajout_avion(char* table_champ[], int nbr_champ, void * liste, void * list
 
     listeavion = (llist *) liste;
     nouveau = (ptr_t_avions) malloc(sizeof(t_client));
+
+
+    nouveau->capacite = (long) table_champ[1];
+
 	strcpy(nouveau->modele, table_champ[0]);
-
-    nouveau->capacite = atoi( table_champ[1]);
-    nouveau->autonomie = atoi( table_champ[2] );
-
 
 	liste = ajouterEnTete(listeavion, nouveau);
 
@@ -170,10 +171,14 @@ void * ajout_destination (char* table_champ[], int nbr_champ, void * liste, void
     listedestination = (llist) liste;
     nouveau = (ptr_t_destination) malloc(sizeof(t_destination));
 	strcpy(nouveau->code, table_champ[0]);
+	printf("nouveau->code : %s", nouveau->code);
 
     nouveau->destination = table_champ[1];
+    printf("nouveau->destination : %s", nouveau->destination);
     nouveau->origine = table_champ[2];
+    printf("nouveau->origine : %s", nouveau->origine);
     nouveau->distance = atoi( table_champ[2] );
+    printf("nouveau->distance : %ld\n", nouveau->distance);
 
     DBG
 
@@ -267,15 +272,18 @@ void * ajout_vols_en_cours (char* table_champ[], int nbr_champ, void * liste, vo
 void * ajout_vols (char* table_champ[], int nbr_champ, void * liste, void * liste2)
 {
     ptr_t_vols nouveau;
-    ptr_t_vols arbre;
+    ptr_t_vols *arbre;
+    llist listedest;
     int i;
-
+    printf("liste 2 = %ld", liste2);
+    //printf("liste 2 = %ld", *liste2);
+    listedest = (llist) &liste2;
 
 
 	if (table_champ[0] == NULL)   // Si le premier champ est vide on annule l'enregistrement de la ligne
 		return liste;
 
-    arbre = (ptr_t_vols ) liste;
+    arbre = (ptr_t_vols *) liste;
     nouveau = init_listevols ( table_champ[0] );
     DBG
     puts(nouveau->code_vol);
@@ -289,15 +297,22 @@ void * ajout_vols (char* table_champ[], int nbr_champ, void * liste, void * list
     strcpy(nouveau->avion, table_champ[1] );
     nouveau->nbr_client = atoi( table_champ[2] );
     nouveau->horaire = atoi( table_champ[3] );
+
     for (i = 0; i < 31; i ++)  // Mise à zéro des jours seront chargé plus tard
     {
         nouveau->jour[i] = 0;
     }
+    // ajout des pointeurs vers destinations
+    //printf("listedest : %ld", *listedest);
+
+    //nouveau->ptr_dest = recherche(nouveau->dest , listedest , &recherche_dest); // Recherche d'une destination pour faire le liens entres les structures
+
 
     DBG
-    ajoutavl( nouveau, &arbre);
+	printf("%ld\n", *arbre);
+    ajoutavl( nouveau, arbre);
 
-    return;
+    return (arbre);
 }
 
 
@@ -315,4 +330,3 @@ llist *init_listeclient (void)
     }
     return (ll);
 }
-

@@ -1,5 +1,6 @@
 #include "../structure.h"
 #include "interface.h"
+#include "../recherche/recherche.h"
 
 void OnDestroy(GtkWidget* widget, gpointer data)
 {
@@ -38,46 +39,30 @@ char* txt;
 
 return txt;
 }
-//
+////////////////////
 void verif_champs(Window_ident *p, Window_ident* pf)
 {
   const gchar *sText_cle,*sText_mot_de_passe;
   int i=0,j=0,k;
-  t_client* ptr;
+  ptr_t_client client;
   int OK=0;
   
   //Recuperation de la cle et du mdp dans les sText_ correspondants.
   sText_cle =recup_chp(pf->pcle);
   
   sText_mot_de_passe =recup_chp(pf->pmot_de_passe);
-    
   printf("cle : %s\n",sText_cle);//[CONSOLE]
   printf("mdp : %s\n",sText_mot_de_passe);//[CONSOLE]
   
-//calcul de l'indice ds la TDH
-i=hachage1((char*)sText_cle);
-j=hachage2((char*)sText_cle);
-printf("\ni=%ld; j=%ld\n",i,j);//ok
+client =(ptr_t_client) recherche((void*)sText_cle , pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
-//pointeur sur listes des t_clients :
-
-ptr= (pf->tabDH+i+j*(TAILLETDH-1));
-
-printf("%ld",ptr);
-while (ptr != 0 && OK!= 1 && (ptr->cle)!= NULL)
- {
-    if(strcmp(ptr->cle,sText_cle)==0 && strcmp(ptr->mot_de_passe,sText_mot_de_passe)==0)
+if(client != 0)
      {
      
      OK=1;
      printf("LE client EXISTE !!\n"); //[CONSOLE]
      gtk_label_set_text((GtkLabel*)pf->pLabel_info,"LOGIN OK");
      }
-    
-    else ptr=ptr->suiv;
-    
- }
-
 
 
 if (OK==0)
@@ -85,7 +70,7 @@ if (OK==0)
     printf("Le client n'existe pas ..\n");//[CONSOLE]
     //on signale le pb
     gtk_label_set_text((GtkLabel*)pf->pLabel_info,"Erreur d'authentification!\n Veuillez vous inscrire!");
-    //on vide les champs :
+    //on vide les champs:
     gtk_entry_set_text((GtkEntry*)pf->pcle,"");
     gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe,"");
     }
@@ -96,10 +81,11 @@ if (OK==0)
 if (OK==1) 
  {
   gtk_main_quit();
-  f_principale(ptr);  
+  f_principale(client);  
  }
   
 }
+
 ////////////////////*******************************////////////////////////////
 void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
 {
@@ -109,35 +95,56 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
  
  
  ptr_t_client ptr;
- long i,j;
+ long i,j=0,ERR=0;
  
  printf("%s\n",recup_chp (pf->pprenom));
  // 0 : clé
  tab[0]=strdup(gen_cle2(recup_chp (pf->pnom), recup_chp(pf->pprenom) , (long)atoi((char*)recup_chp(pf->ptel)) , 0));
  //1 : nom
- tab[1]=strdup((const char*)recup_chp(pf->pnom));
+ tab[2]=strdup((const char*)recup_chp(pf->pnom));
  //printf("\nINSCRIREtab : %s\n",tab[1]);
 
  //2: prenom
- tab[2]=strdup((const char*)recup_chp(pf->pprenom));
+ tab[3]=strdup((const char*)recup_chp(pf->pprenom));
  
  //3: tel
- tab[3]=strdup((const char*)recup_chp(pf->ptel));
+ tab[4]=strdup((const char*)recup_chp(pf->ptel));
 
  //4: adresse
- tab[4]=strdup((const char*)recup_chp(pf->padresse));
+ tab[5]=strdup((const char*)recup_chp(pf->padresse));
  //5: Ville
  
- tab[5]=strdup((const char*)recup_chp(pf->pville));
+ tab[6]=strdup((const char*)recup_chp(pf->pville));
  //6: Pays 
- tab[6]=strdup((const char*)recup_chp(pf->ppays));
+ tab[7]=strdup((const char*)recup_chp(pf->ppays));
  //7 : mdp
- tab[7]=strdup((const char*)recup_chp(pf->pmot_de_passe));
+ tab[1]=strdup((const char*)recup_chp(pf->pmot_de_passe));
  tab[8]=strdup((const char*)recup_chp(pf->pmot_de_passe2));
 
+ for(i=0;i<8;i++)
+ {
+ while (j<strlen(tab[i]))
+     {
+     j++;
+     if((tab[i][j])==';')
+         {
+         printf("ERREUR! [inscription]: ';' insere !\n");
+         ERR=1;
+         }
+     } 
+ 
+ if(ERR==1)
+     {
+        //on signale le pb
+        gtk_label_set_text((GtkLabel*)pf->pLabel_info,"Veuillez entrez des caracteres alphanumeriques !");
+        //on vide les champs :
+        //gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe,"");
+        //gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe2,"");
+     } 
+ } 
  
 // BLINDAGE DE LA SAISIE ! 
- if (strcmp(tab[7],tab[8])!=0)
+ if (strcmp(tab[1],tab[8])!=0)
  {
  printf("[inscription : mot de passe different ![ERREUR]]\n");//[CONSOLE]
  //on signale le pb
@@ -147,11 +154,10 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
     gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe2,"");
  } 
  
-for (i=0;i<8;i++) 
+for (i=0;i<9;i++) 
 {printf("tab[%ld] : %s\n",i,tab[i]);}
 
- 
-
+ajout_client(tab, 8 , pf->tabDH);
 /*
 //calcul de l'indice ds la TDH
 i=hachage1(tab[0]);
@@ -166,36 +172,4 @@ ptr= (pf->pf1->tabDH+i+j*(TAILLETDH-1));
 }
 
 
-/////////////////**********************************///////////////////////
-int hachage1(char* sText_cle)
-{
-int i;
-//1er caractère !
-if (sText_cle[0]>=97 && sText_cle[0]<=122) //si 1er carac. minuscule
-          {
-          i=sText_cle[0]-97;
-          }     
-else if (sText_cle[0]>=65 && sText_cle[0]<=90) //MAJ
-    {
-    i=sText_cle[0]-65;
-    }    
-else i=TAILLETDH-1;
 
-return i;
-}
-///////////////////
-int hachage2(char* sText_cle)
-{
-int j;
-//2ème caractère
-if (sText_cle[1]>=97 && sText_cle[1]<=122) //si 1er carac. minuscule
-          {
-          j=sText_cle[1]-97;
-          }     
-else if (sText_cle[1]>=65 && sText_cle[1]<=90) //MAJ
-    {
-    j=sText_cle[1]-65;
-    }    
-else j=TAILLETDH-1;
-return j;
-}
