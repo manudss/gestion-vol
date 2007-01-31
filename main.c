@@ -2,6 +2,7 @@
 #include "liste/liste.h"
 #include "avl/avl.h"
 #include "chargement/chargement.h"
+#include "temps/temps.h"
 
 int main()
 {
@@ -12,6 +13,43 @@ int main()
 	int nbr;
 	ptr_t_vols *tab;
     int i, n=0;
+
+    // gestion du temps
+    t_temps temps;
+    time_t now = time (NULL);
+    now = now + 5184000;
+   struct tm tm_now = *localtime (&now);
+   char s[64];
+
+   strftime (s, sizeof s, "%A %d %B %H h %M:%S", &tm_now);
+   printf ("Aujourd'hui : %s\n", s);
+
+
+
+
+    /*
+    t_temps temps;
+    struct tm tm_now;
+   char s[64];
+
+    tm_now = *localtime (&temps.deb);
+   strftime (s, sizeof s, "%d/%m/%Y", &tm_now);
+   printf ("Aujourd'hui : %s\n", s);
+    */
+    //temps = quelheure(temps.deb);
+
+
+
+
+system("pause");
+
+
+
+
+
+
+    // fin temps
+
 
 	if ((listeclient = init_listeclient()) == NULL)
         exit (2);
@@ -24,28 +62,41 @@ int main()
 
     printf("fin chargement");
 /*
+     // simple test pas important
     nbr = nbr_elmt(arbrevol);
 	 printf("nbr de champ %ld\n",nbr);
-    DBG
+
     tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * nbr);
-    DBG
+
     parcourttotab( arbrevol, tab, &n );
 
     printf("nbr de champ \n");
 
     for (i = 0; i < nbr; i ++)
     {
-        printf("tab[%ld ]->code_vol : %s",i, tab [ i ]->code_vol);
+        printf("tab[%ld ]->code_vol : %s\n",i, tab [ i ]->code_vol);
     }
 
+
 */
+
     //afficherListe(listeclient[hachage("DE")], &affiche_client);
     //afficherListe(listeavion, &affiche_avion);
 
     //listeclient = effacerListe(listeclient, &freet_client);
     //listeavion = effacerListe(listeavion, &freet_avions);
     //vols(0,0);
+
+
+     // fin test
+
+
+
+
+    //identification ((llist**)listeclient);
+
     identification ((llist**)listeclient, arbrevol);
+
 
 	return 0;
 }
