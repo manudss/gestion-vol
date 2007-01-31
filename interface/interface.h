@@ -50,6 +50,7 @@ typedef struct _MainWindow
 //    struct t_client *liste;
     
 }MainWindow;
+
 ///////////////////////////////////
 typedef struct _inscrire
 {
@@ -79,12 +80,15 @@ llist** tabDH;
 typedef struct _vols
 {
 GtkWidget *pWindow;//FENETRE
+//GtkScrolledWindow *pSWindow;
+
 GtkWidget *pLabel; //labels
 GtkWidget *pTable; //table
+GtkWidget *pTable2;
 
-GtkWidget *pChoix[];//tableau de pointeur de boutons
+GtkWidget **pChoix;//tableau de pointeur de boutons
 
-//GtkWidget *pScrollbar;//scrollbar
+GtkWidget *pScrollbar;//scrollbar
 
 }VolsWindow;
 
@@ -131,7 +135,7 @@ int f_principale(ptr_t_client);
 *
 * 
 */
-void vols(Window_ident *p,Window_ident *pf1);
+void vols(MainWindow *p,MainWindow *pf1);
 
 char* recup_chp(GtkWidget*);
 void inscription(Window_ident *,Window_ident *);
@@ -140,5 +144,7 @@ void inscription(Window_ident *,Window_ident *);
 char* gen_cle2(char* , char* , long , long );
 void * ajout_client(char* table_champ[], int , void * );
 llist ajouterEnTete(llist , void * );
+//
+//GtkWidget* affiche_vol(GtkWidget*);
 
 #endif
