@@ -1,7 +1,7 @@
 #include "../structure.h"
 #include "interface.h"
 ///////////////////////////////////////
-int identification(llist* TDH[])
+int identification(llist* TDH[],ptr_t_vols *arbrevol)
 {
     /*Declaration et initialisation fenetre */
     
@@ -10,8 +10,11 @@ int identification(llist* TDH[])
     GtkWidget *pLabel_cle;
     GtkWidget *pLabel_mot_de_passe;
     
-    gtk_init(0,0);
+    
     pf = g_malloc(sizeof(Window_ident));
+    pf->arbrevol = arbrevol ; //aquisition de l'arbre .
+    gtk_init(0,0);
+    
     
     pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
@@ -105,14 +108,16 @@ int identification(llist* TDH[])
     return EXIT_SUCCESS;
 }
 /////////////////////////////////////////////
-int f_principale(ptr_t_client client)
+int f_principale(ptr_t_client client,ptr_t_vols *arbrevol)
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
 
+ pf = g_malloc(sizeof(MainWindow)); 
+ pf->arbrevol = arbrevol;
  gtk_init(0,0);
  
- pf = g_malloc(sizeof(MainWindow));   
+   
  pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
  
  
@@ -392,71 +397,95 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
 void vols(MainWindow *p,MainWindow *pf1)
 {
 VolsWindow *pf;
-int n=34,i;
-char * nom=".!.";
+int i;
+int cpt;
+int n=0;
 
+cpt=0;
 
+printf("\nENTREE DANS VOLS");
 pf = (VolsWindow*)g_malloc(sizeof(VolsWindow));
-(pf->pChoix) = (GtkWidget**)g_malloc(sizeof(GtkWidget)* n);
-//pf->pLabel = (GtkWidget**)g_malloc(sizeof(GtkWidget)* n);
+pf->arbrevol = pf1->arbrevol;
+
+pf->nbr = nbr_elmt(pf->arbrevol);
+printf("pf->nbr de champ %ld\n",pf->nbr);
+pf->tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * pf->nbr);
+parcourttotab( pf->arbrevol, pf->tab, &n);
+
+
+pf->pChoix = (GtkWidget**)g_malloc(sizeof(GtkWidget)* (pf->nbr)+1);
+pf->pLabel2 = (GtkWidget**)g_malloc(sizeof(GtkWidget)* (pf->nbr));
 
 gtk_init(0,0);
-
 pf->pWindow= gtk_window_new(GTK_WINDOW_TOPLEVEL);
 //pf->pWindow =gtk_scrolled_window_new(NULL,NULL);
 //gtk_scrolled_window_add_with_viewport((GtkScrolledWindow*)pf->pWindow,pf->pTable);
 
 gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
-gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 800, 200);
-gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
+gtk_window_move(GTK_WINDOW(pf->pWindow), 500, 400);
+gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 900, 600);
+//gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
 gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : Reservation Vols");
 pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
 
-//gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
-
+gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
 
  /* Creation et insertion de la table */
- pf->pTable2 = gtk_table_new(n,5,TRUE);
- gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable2));
- gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pf->pScrollbar), pf->pTable2);
+ pf->pTable = gtk_table_new(pf->nbr,5,TRUE);
+ gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
+ gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pf->pScrollbar), pf->pTable);
  
-/*
-     gtk_table_attach(GTK_TABLE(pf->pTable2),pf->pLabel,
-     0, 4, i, i+1,
-     GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
-           0, 0);
- 
-*/ 
  
  // Boucle création table ...
- for (i=0;i<n;i++)
+ for (i=0;i<pf->nbr;i++)
      {
-     pf->pChoix[i] = gtk_button_new_with_label("Choisir");
+     //Boutons
+     pf->pChoix[i] = gtk_toggle_button_new_with_label("Choisir");
      
-     /*label: vol*/ pf->pLabel = gtk_label_new(nom);
-     gtk_table_attach(GTK_TABLE(pf->pTable2),pf->pLabel,
+     //labels ..
+     *(pf->pLabel2+i)=gtk_label_new(pf->tab[i]->code_vol) ;   
+     
+     /*label: vol*/ 
+     gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel2[i],
      0, 4, i, i+1,
      GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
            0, 0);
      
      // bouton reservation vol
-     gtk_table_attach(GTK_TABLE(pf->pTable2),pf->pChoix[i],
+     gtk_table_attach(GTK_TABLE(pf->pTable),pf->pChoix[i],
      4, 5, i, i+1,
      GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
             15, 25);
      
+     
      }
  
- 
+
  
  /*Callbacks: */
+
+for(i=0; i< pf->nbr; i++)
+ {
+ 
+ g_signal_connect(G_OBJECT(pf->pChoix[i]), "clicked", G_CALLBACK(clic),(gpointer*) pf); 
+ }
+  
+ //g_signal_connect(G_OBJECT(pf->pChoix[1]), "clicked", G_CALLBACK(clic),&cpt); 
+ DBG
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0); 
+ DBG
+ 
  
  /* Affichage de la fenetre */
  gtk_widget_show_all(pf->pWindow);
 
  /* Demarrage de la boucle evenementielle */
  gtk_main();
+ 
+ printf("\ni : %ld\t cpt : %ld\n",i,cpt);
+  
+
  g_free(pf);
-printf("5\n");
+
 }
+
