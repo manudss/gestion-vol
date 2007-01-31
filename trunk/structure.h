@@ -76,35 +76,6 @@ typedef struct t_ff
 
 }t_ff;
 
-/** @struct  t_vols_cours
-* @brief Structure pour les vols_en_cours
-* @version 1.0
-* @bug Y a pas
-* @warning Y a pas
-* @param
-*
-*/
-
-typedef struct t_vols_cours
-{
-    char cle[11];   // Les Deux premières lettres du prénom + les deux premières du nom + 4 derniers chiffres du numéro de tél +  FF si frequent flyer NN si non fréquent Flyer + 1 chiffre pour éviter les doublons
-	struct t_historique_vols *vols;  // Pointeur vers une liste chainée des vols éffectués
-}t_vols_cours;
-
- /** @struct  t_historique_vols
-* @brief liste chainée de vols
-* @version 1.0
-* @bug Y a pas
-* @warning Y a pas
-* @param
-*
-*/
-
-typedef struct t_historique_vols
-{
-    char num_vol[12];   // le numéro de vol (desorihhmm) + jour
-
-}t_historique_vols;
 
  /** @struct  t_avions
 * @brief liste chainée des avions
@@ -145,6 +116,22 @@ typedef struct t_destination
 
 typedef t_destination* ptr_t_destination;  // pointeur vers une destination
 
+/** @struct  element
+* @brief structure d'une liste chainée générale
+*
+* @param
+*
+*/
+
+typedef struct element element;
+struct element
+{
+    void *data;
+    struct element *suiv;
+};
+
+
+typedef element* llist;
 
  /** @struct  t_liste_client
 * @brief liste chainée des clients pour un vol rangé par jour.
@@ -157,13 +144,14 @@ typedef t_destination* ptr_t_destination;  // pointeur vers une destination
 
 typedef struct t_liste_client
 {
-    char cle_clent[9];   	// le numéro de clé du client
-	// suiv
-    struct t_liste_client *suiv; 					//cellule suivante
+    int nbr_client;   	// le nombre de client
+    llist *liste_client; 					//cellule suivante
 
 }t_liste_client;
 
-typedef t_liste_client* ptr_t_liste_client;  // pointeur vers un avion
+
+
+
 
 /** @struct  t_vols
 * @brief arbres ordonée lexicographiquement des vols
@@ -185,7 +173,7 @@ typedef struct t_vols
 	int horaire; // l'horaire du vol
 	int prix; // le prix du vol
 
-	ptr_t_liste_client jour[31];  // un tableau de pointeur chaque case corresepond à un jour du mois et pointe vers la liste des passager
+	t_liste_client jour[31];  // un tableau de pointeur chaque case corresepond à un jour du mois et pointe vers la liste des passager
 	int nbr_client;  // le nombre de client ayant déjà réserver ce vol
 	// arbres AVL
     struct t_vols *fd; 	//fils droit
@@ -196,35 +184,23 @@ typedef struct t_vols
 
 typedef t_vols* ptr_t_vols;  // pointeur vers un vols
 
-/** @struct  element
-* @brief structure d'une liste chainée générale
-*
-* @param
-*
-*/
 
-typedef struct element element;
-struct element
-{
-    void *data;
-    struct element *suiv;
-};
 
-typedef struct donnee
-{
-    long data;
-}donnee;
-
-typedef element* llist;
-
-/** @struct  strucutre
+/** @struct  temps
 * @brief Une union permettant de stocké n'importe quel pointeur de structure
 *
 * @param
 *
 */
-union listeuniversel {
-llist  listechaine;
 
-} listeuniversel;
+typedef struct temps
+{
+    int jour;
+    time_t heure;
+    time_t deb;
+
+}t_temps;
+
+typedef t_temps* ptr_t_temps;
+
 #endif

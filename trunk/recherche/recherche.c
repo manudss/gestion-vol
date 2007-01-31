@@ -15,7 +15,7 @@ void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* acherch
 
     int ok =0;
 	void * cherche = NULL;
-    DBG
+
     val = (char *) achercher;
     printf("recherche ... ");
     puts(val);
@@ -28,16 +28,16 @@ void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* acherch
 
     while(liste != NULL && ok != 1 )
     {
-        DBG
+
         //puts(&liste->data);
-        DBG
+
         printf("liste->data : %ld\n", liste->data);
-        DBG
+
 		cherche = fct_rech(achercher, liste->data);
 
     	if(cherche != NULL)
     	{
-    	    DBG
+
     	    tmp = (llist) cherche;
     	    printf("trouver");
 
@@ -46,13 +46,13 @@ void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* acherch
     	}
 		else
 		{
-		    DBG
+
 		    liste = liste->suiv;
-		    DBG
+
 		}
 
     }
-    DBG
+
     return liste;
 }
 
@@ -75,27 +75,27 @@ if ( tmp = recherche(cleclient , TDH[ hachage(cleclient) ] , &recherche_dest) !=
 
 void * recherch_client_par_cle(void* achercher,void * chercherdans)
 {
-    DBG
+
     char * cle;
     ptr_t_client client;
-    DBG
+
     cle = (char*) achercher;
     puts(cle);
     client = (ptr_t_client) chercherdans;
     printf("chercherdans : %ld\n", chercherdans);
     printf("client : %ld\n", client);
 
-    DBG
+
     puts(client->cle);
-    DBG
+
     if (strcmp(cle , &client->cle) == 0 )
     {
-        DBG
+
         return chercherdans;
     }
     else
     {
-        DBG
+
         return NULL;
     }
 
@@ -121,10 +121,10 @@ if ( tmp = recherche(codedestination , listedestination , &recherche_dest) != NU
 
 void * recherche_dest(void* achercher,void * chercherdans)
 {
-    DBG
+
     char * codedest;
     ptr_t_destination dest;
-    DBG
+
     codedest = (char*) achercher;
     puts(codedest);
     dest = (ptr_t_destination) chercherdans;
@@ -132,17 +132,17 @@ void * recherche_dest(void* achercher,void * chercherdans)
     //printf("dest : %ld\n", *dest);
     //printf("client : %ld\n", dest);
 
-    DBG
+
     puts(dest->code);
-    DBG
+
     if (strcmp(codedest , &dest->code) == 0 )
     {
-        DBG
+
         return chercherdans;
     }
     else
     {
-        DBG
+
         return NULL;
     }
 
@@ -166,10 +166,10 @@ if ( tmp = recherche(modele  , listeavion , &recherche_avion) != NULL );   // mo
 
 void * recherche_avion(void* achercher,void * chercherdans)
 {
-    DBG
+
     char * modele;
     ptr_t_avions avion;
-    DBG
+
     modele = (char*) achercher;
     puts(modele);
     avion = (ptr_t_avions) chercherdans;
@@ -177,17 +177,17 @@ void * recherche_avion(void* achercher,void * chercherdans)
     //printf("dest : %ld\n", *dest);
     //printf("client : %ld\n", dest);
 
-    DBG
+
     puts(avion->modele);
-    DBG
+
     if (strcmp(modele , &avion->modele) == 0 )
     {
-        DBG
+
         return chercherdans;
     }
     else
     {
-        DBG
+
         return NULL;
     }
 

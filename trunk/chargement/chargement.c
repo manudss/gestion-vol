@@ -180,7 +180,7 @@ void * ajout_destination (char* table_champ[], int nbr_champ, void * liste, void
     nouveau->distance = atoi( table_champ[2] );
     printf("nouveau->distance : %ld\n", nouveau->distance);
 
-    DBG
+
 
 	listedestination = ajouterEnTete(listedestination, nouveau);
 
@@ -194,38 +194,38 @@ void * ajout_FF (char* table_champ[], int nbr_champ, void * liste, void * liste2
     ptr_t_client elmt;
     ptr_t_ff nouveau;
     int indice, i;
-    DBG
+
     if (table_champ[0] == NULL)   // Si le premier champ est vide on annule l'enregistrement de la ligne
 		return liste;
-		DBG
+
     indice = hachage(table_champ[0]);
 	TDH = (llist *) liste;
-    DBG
+
     printf("ajout_FF : %ld", TDH[ indice ]);
 	elmt = recherche(table_champ[0] , TDH[ indice ] , &recherch_client_par_cle);           // Recherche d'un client
     if (elmt == NULL)   // Si on a pas trouvé cette élément on arrete
 		return liste;
-    DBG
+
     nouveau = (ptr_t_ff) malloc(sizeof(t_ff));
-    DBG
+
 	strcpy(nouveau->cle, table_champ[0]);
-    DBG
+
     nouveau->points = atoi ( table_champ[1] );
-    DBG
+
     nouveau->km = atoi ( table_champ[2] );
 
     for ( i = 3; i < nbr_champ; i ++ )
     {
-        DBG
+
         listeff = ajouterEnTete(listeff, table_champ[ i ]);
     }
-    DBG
+
     nouveau->vols = &listeff;
 
-    DBG
+
 
 	elmt->ff = nouveau;
-    DBG
+
     return liste;
 }
 
@@ -236,36 +236,36 @@ void * ajout_vols_en_cours (char* table_champ[], int nbr_champ, void * liste, vo
     ptr_t_client elmt;
     ptr_t_ff nouveau;
     int indice, i;
-    DBG
+
     if (table_champ[0] == NULL)   // Si le premier champ est vide on annule l'enregistrement de la ligne
 		return liste;
-		DBG
+
     indice = hachage(table_champ[0]);
 	TDH = (llist *) liste;
-    DBG
+
     //printf("ajout_vols : %ld\n", TDH[ indice ]);
-    DBG
+
 	elmt = recherche(table_champ[0] , TDH[ indice ] , &recherch_client_par_cle);           // Recherche d'un client
     if (elmt == NULL)   // Si on a pas trouvé cette élément on arrete
 		return liste;
-    DBG
+
     nouveau = (ptr_t_ff) malloc(sizeof(t_vols));
-    DBG
+
 	strcpy(nouveau->cle, table_champ[0]);
-    DBG
+
 
     for ( i = 1; i < nbr_champ - 1; i ++ )
     {
-        DBG
+
         listeff = ajouterEnTete(listeff, table_champ[ i ]);
     }
-    DBG
+
     nouveau->vols = &listeff;
 
-    DBG
+
 
 	elmt->ff = nouveau;
-    DBG
+
     return liste;
 }
 
@@ -285,32 +285,53 @@ void * ajout_vols (char* table_champ[], int nbr_champ, void * liste, void * list
 
     arbre = (ptr_t_vols *) liste;
     nouveau = init_listevols ( table_champ[0] );
-    DBG
     puts(nouveau->code_vol);
+
+
+
     for (i = 0; i < 6; i ++)  // copie de la destination qui est les 6 premières lettres du code vols
     {
         nouveau->dest[i] = table_champ[0][i];
     }
     nouveau->dest[6] = '\0';
-    DBG
+
     puts(nouveau->dest);
+
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
+
+    strcpy( nouveau->code_vol, table_champ[0] );
+
     strcpy(nouveau->avion, table_champ[1] );
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
     nouveau->nbr_client = atoi( table_champ[2] );
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
     nouveau->horaire = atoi( table_champ[3] );
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
 
     for (i = 0; i < 31; i ++)  // Mise à zéro des jours seront chargé plus tard
     {
-        nouveau->jour[i] = 0;
+        nouveau->jour[i].nbr_client = 0;
+        nouveau->jour[i].liste_client = NULL;
     }
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
     // ajout des pointeurs vers destinations
     //printf("listedest : %ld", *listedest);
 
     //nouveau->ptr_dest = recherche(nouveau->dest , listedest , &recherche_dest); // Recherche d'une destination pour faire le liens entres les structures
 
 
-    DBG
+
 	printf("%ld\n", *arbre);
+	printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
     ajoutavl( nouveau, arbre);
+    printf("\n--------------la destination : --------------\n");
+    puts(nouveau->code_vol);
 
     return (arbre);
 }
