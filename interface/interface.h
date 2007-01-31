@@ -2,6 +2,7 @@
 #define Interface_H
 
 #include <gtk/gtk.h>
+#include "../structure.h"
  //pour strcmp..
 
 //Struct
@@ -21,6 +22,7 @@ typedef struct _ident_Window
     GtkWidget *pWindow;//FENETRE
     
     GtkWidget *pLabel_info; //label etat inscription.
+    ptr_t_vols *arbrevol;
     
      llist** tabDH;
 }Window_ident;
@@ -46,6 +48,7 @@ typedef struct _MainWindow
     //label:
     GtkWidget *pLabel_bienvenue; //bienvenue GENERIQUE
     GtkWidget *pLabel_msg;
+    ptr_t_vols *arbrevol;
     
 //    struct t_client *liste;
     
@@ -79,16 +82,23 @@ llist** tabDH;
 //////////////////VOLS/////////////////////
 typedef struct _vols
 {
+int i;
+int nbr;
 GtkWidget *pWindow;//FENETRE
 //GtkScrolledWindow *pSWindow;
 
 GtkWidget *pLabel; //labels
-GtkWidget *pTable; //table
-GtkWidget *pTable2;
+GtkWidget **pLabel2; //tableau de labels
 
-GtkWidget **pChoix;//tableau de pointeur de boutons
+GtkWidget *pTable; //table
+
+
+GtkWidget** pChoix;//tableau de pointeur de boutons
 
 GtkWidget *pScrollbar;//scrollbar
+
+ptr_t_vols *arbrevol;
+ptr_t_vols *tab;
 
 }VolsWindow;
 
@@ -111,7 +121,7 @@ void verif_champs(Window_ident *, Window_ident* );
 * On pourrait externaliser la partie de parcours de la liste chainée pour comparer la clé et le mdp au t_client...
 */
 
-int identification(llist** );
+int identification(llist** ,ptr_t_vols *arbrevol);
 /** @function identification
 * @brief fonction affichant la fenetre de connexion et callbacks
 * @version 1.0
@@ -124,7 +134,7 @@ int identification(llist** );
 */
 void inscrire(InscrireWindow *,InscrireWindow *);
 
-int f_principale(ptr_t_client);
+int f_principale(ptr_t_client,ptr_t_vols *arbrevol);
 /** @function f_principale
 * @brief fonction affichant la fenetre principale + callbacks
 * @version 1.0
@@ -144,6 +154,7 @@ void inscription(Window_ident *,Window_ident *);
 char* gen_cle2(char* , char* , long , long );
 void * ajout_client(char* table_champ[], int , void * );
 llist ajouterEnTete(llist , void * );
+void clic (GtkWidget* ,VolsWindow* n);
 //
 //GtkWidget* affiche_vol(GtkWidget*);
 

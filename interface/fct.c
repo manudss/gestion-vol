@@ -55,7 +55,7 @@ void verif_champs(Window_ident *p, Window_ident* pf)
   printf("cle : %s\n",sText_cle);//[CONSOLE]
   printf("mdp : %s\n",sText_mot_de_passe);//[CONSOLE]
   
-client =(ptr_t_client) recherche((void*)sText_cle , pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
+client =(ptr_t_client) recherche((void*)sText_cle ,(llist) pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
 printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,client->mot_de_passe);
 if(client != 0 && strcmp(sText_mot_de_passe,client->mot_de_passe)==0 )
@@ -83,7 +83,7 @@ if (OK==0)
 if (OK==1) 
  {
   gtk_main_quit();
-  f_principale(client);  
+  f_principale(client,pf->arbrevol);  
  }
   
 }
@@ -173,9 +173,18 @@ ptr= (pf->pf1->tabDH+i+j*(TAILLETDH-1));
 */
 }
 
-GtkWidget* affiche_vol(GtkWidget* pf)
-{
 
+void clic (GtkWidget* a,VolsWindow* pf)
+{
+int i=0,btn=-1;
+
+//printf("\ni = %ld",pf->i);
+for(i=0;i<pf->nbr;i++)
+    {
+    if(gtk_toggle_button_get_active (pf->pChoix[i])!=0)
+    btn = i;
+    }
 }
+
 
 

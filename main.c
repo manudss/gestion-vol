@@ -23,7 +23,7 @@ int main()
 	chargement("listevols.csv", (void *) &ajout_vols, (void *) &arbrevol, NULL);
 
     printf("fin chargement");
-
+/*
     nbr = nbr_elmt(arbrevol);
 	 printf("nbr de champ %ld\n",nbr);
     DBG
@@ -38,13 +38,14 @@ int main()
         printf("tab[%ld ]->code_vol : %s",i, tab [ i ]->code_vol);
     }
 
+*/
     //afficherListe(listeclient[hachage("DE")], &affiche_client);
     //afficherListe(listeavion, &affiche_avion);
 
     //listeclient = effacerListe(listeclient, &freet_client);
     //listeavion = effacerListe(listeavion, &freet_avions);
     //vols(0,0);
-    //identification ((llist**)listeclient);
+    identification ((llist**)listeclient, arbrevol);
 
 	return 0;
 }

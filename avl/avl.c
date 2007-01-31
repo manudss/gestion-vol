@@ -334,7 +334,7 @@ int parcourttotab(ptr_t_vols a, ptr_t_vols tab[], int *n )
 
 		 printf("tab[%ld]->code_vol : %s\n",  *n , tab[ *n ]->code_vol);
 		 *n = *n + 1;
-		 n += parcourttotab(a->fd, tab, n);
+		 parcourttotab(a->fd, tab, n);
 
 	 }
 
