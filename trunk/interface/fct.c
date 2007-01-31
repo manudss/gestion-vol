@@ -57,7 +57,8 @@ void verif_champs(Window_ident *p, Window_ident* pf)
   
 client =(ptr_t_client) recherche((void*)sText_cle , pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
-if(client != 0 )
+printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,client->mot_de_passe);
+if(client != 0 && strcmp(sText_mot_de_passe,client->mot_de_passe)==0 )
      {
      
      OK=1;
