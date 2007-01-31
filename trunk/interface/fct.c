@@ -39,6 +39,7 @@ char* txt;
 
 return txt;
 }
+
 ////////////////////
 void verif_champs(Window_ident *p, Window_ident* pf)
 {
@@ -56,7 +57,7 @@ void verif_champs(Window_ident *p, Window_ident* pf)
   
 client =(ptr_t_client) recherche((void*)sText_cle , pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
-if(client != 0)
+if(client != 0 )
      {
      
      OK=1;
@@ -126,9 +127,9 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
  while (j<strlen(tab[i]))
      {
      j++;
-     if((tab[i][j])==';')
+     if((tab[i][j])==';'||(tab[i][j])== '"'  )
          {
-         printf("ERREUR! [inscription]: ';' insere !\n");
+         printf("ERREUR! [inscription]: mauvais caractere insere !\n");
          ERR=1;
          }
      } 
@@ -171,5 +172,9 @@ ptr= (pf->pf1->tabDH+i+j*(TAILLETDH-1));
 */
 }
 
+GtkWidget* affiche_vol(GtkWidget* pf)
+{
+
+}
 
 
