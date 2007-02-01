@@ -134,11 +134,9 @@ void lecturetemps (ptr_t_temps temps)
     fichtemps = fopen("temps.txt", "r");
     if (fichtemps != NULL)
     {
-
         fscanf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", &(temps->cour.tm_sec), &(temps->cour.tm_min) ,
         &(temps->cour.tm_hour) ,&(temps->cour.tm_mday) , &(temps->cour.tm_mon) , &(temps->cour.tm_year) , &(temps->cour.tm_wday) ,
         &(temps->cour.tm_yday) , &(temps->cour.tm_isdst));
-
         temps->courant = mktime(&temps->cour);
     }
     else

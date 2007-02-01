@@ -8,7 +8,7 @@
 
 */
 
-int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour);
+int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t_temps temps);
 
 
 #endif
