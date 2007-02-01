@@ -118,6 +118,7 @@ GtkWidget *pWindow;
 GtkWidget *pLabel;
 GtkWidget *pTable;
 GtkWidget *pJour;
+GtkWidget *pCombo;
 GtkWidget *pValider;
 
 t_client* client;
