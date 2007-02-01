@@ -435,7 +435,7 @@ int choix_jour(VolsWindow* pf1,int i)
     
     for (k=1;k<=31;k++)
     {
-        gtk_combo_box_insert_text(pf->pJour,k,date(&tmp,k));
+        gtk_combo_box_insert_text(pf->pJour,k,g_locale_to_utf8(date(&tmp,k), -1, NULL, NULL, NULL));
     }    
     
     
