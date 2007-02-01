@@ -39,7 +39,7 @@ typedef struct t_adresse
 
 typedef struct t_client
 {
-    char cle[11];   // Les Deux premières lettres du prénom + les deux premières du nom + 4 derniers chiffres du numéro de tél +  FF si frequent flyer NN si non fréquent Flyer + 1 chiffre pour éviter les doublons
+    char cle[10];   // Les Deux premières lettres du prénom + les deux premières du nom + 4 derniers chiffres du numéro de tél +  FF si frequent flyer NN si non fréquent Flyer + 1 chiffre pour éviter les doublons
 	char *mot_de_passe;  // le mot de passe pour la gestion (pointeur)
 
 	//Etats civil

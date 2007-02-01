@@ -45,7 +45,6 @@ void verif_champs(Window_ident *p, Window_ident* pf)
 {
   const gchar *sText_cle,*sText_mot_de_passe;
   int i=0,j=0,k;
-  ptr_t_client client;
   int OK=0;
   
   //Recuperation de la cle et du mdp dans les sText_ correspondants.
@@ -55,10 +54,10 @@ void verif_champs(Window_ident *p, Window_ident* pf)
   printf("cle : %s\n",sText_cle);//[CONSOLE]
   printf("mdp : %s\n",sText_mot_de_passe);//[CONSOLE]
   
-client =(ptr_t_client) recherche((void*)sText_cle ,(llist) pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
+pf->client =(ptr_t_client) recherche((void*)sText_cle ,(llist) pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
-printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,client->mot_de_passe);
-if(client != 0 && strcmp(sText_mot_de_passe,client->mot_de_passe)==0 )
+printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,pf->client->mot_de_passe);
+if(pf->client != 0 && strcmp(sText_mot_de_passe,pf->client->mot_de_passe)==0 )
      {
      
      OK=1;
@@ -82,8 +81,9 @@ if (OK==0)
 // Si oui : appel de la fonction pour la fenetre principale
 if (OK==1) 
  {
-  gtk_main_quit();
-  f_principale(client,pf->arbrevol);  
+ //
+ gtk_main_quit();
+ f_principale(pf->client,pf->arbrevol,pf->tabDH);  
  }
   
 }
@@ -156,34 +156,32 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
     gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe2,"");
  } 
  
-for (i=0;i<9;i++) 
-{printf("tab[%ld] : %s\n",i,tab[i]);}
+for (i=0;i<9;i++) //affiche le nveau client
+{
+printf("tab[%ld] : %s\n",i,tab[i]);
+}
 
 ajout_client(tab, 8 , pf->tabDH);
-/*
-//calcul de l'indice ds la TDH
-i=hachage1(tab[0]);
-j=hachage2(tab[0]);
-printf("\ni=%ld; j=%ld\n",i,j);//ok
-ptr= (pf->pf1->tabDH+i+j*(TAILLETDH-1));
-
-//appel ajout client
-//ajout_client(tab[8], 8, ptr);
-
-*/
+//
+identification(pf->tabDH,pf->arbrevol);
 }
 
 
 void clic (GtkWidget* a,VolsWindow* pf)
 {
-int i=0,btn=-1;
-
-//printf("\ni = %ld",pf->i);
-for(i=0;i<pf->nbr;i++)
+    int i=0,btn=-1;
+    
+    //printf("\ni = %ld",pf->i);
+    while (btn == -1 && i < pf->nbr)
     {
-    if(gtk_toggle_button_get_active (pf->pChoix[i])!=0)
-    btn = i;
+        if(gtk_toggle_button_get_active (pf->pChoix[i])!=0) btn = i;
+        if (btn != -1)
+                {     
+                   choix_jour(pf, btn);
+                }      
+        i++;
     }
+
 }
 
 

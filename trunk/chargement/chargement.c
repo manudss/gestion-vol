@@ -154,7 +154,7 @@ void * ajout_avion(char* table_champ[], int nbr_champ, void * liste, void * list
 
 	strcpy(nouveau->modele, table_champ[0]);
 
-	liste = ajouterEnTete(listeavion, nouveau);
+	liste = ajouterEnTete((llist)listeavion, nouveau);
 
     return liste;
 }

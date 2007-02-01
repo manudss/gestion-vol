@@ -24,7 +24,8 @@ typedef struct _ident_Window
     GtkWidget *pLabel_info; //label etat inscription.
     ptr_t_vols *arbrevol;
     
-     llist** tabDH;
+    ptr_t_client client;
+    llist** tabDH;
 }Window_ident;
 /////////////////////////////
 typedef struct _MainWindow
@@ -48,9 +49,11 @@ typedef struct _MainWindow
     //label:
     GtkWidget *pLabel_bienvenue; //bienvenue GENERIQUE
     GtkWidget *pLabel_msg;
-    ptr_t_vols *arbrevol;
     
-//    struct t_client *liste;
+    ptr_t_vols *arbrevol;
+    t_client* client;
+    llist** tabDH;
+
     
 }MainWindow;
 
@@ -75,7 +78,8 @@ GtkWidget *pmot_de_passe2;
 //Gtk_button :
 
 GtkWidget *pvalider;
- 
+
+ptr_t_vols *arbrevol;
 llist** tabDH;
 
 }InscrireWindow;
@@ -98,10 +102,30 @@ GtkWidget** pChoix;//tableau de pointeur de boutons
 GtkWidget *pScrollbar;//scrollbar
 
 ptr_t_vols *arbrevol;
-ptr_t_vols *tab;
+llist** tabDH;
+t_client* client;
 
+ptr_t_vols *tab;
 }VolsWindow;
 
+/////////////Temps ///////
+typedef struct choix_jour
+{
+int jour;
+
+GtkWidget *pWindow;
+
+GtkWidget *pLabel;
+GtkWidget *pTable;
+GtkWidget *pJour;
+GtkWidget *pValider;
+
+t_client* client;
+ptr_t_vols *arbrevol;
+llist** tabDH;
+ptr_t_vols vol;
+
+}JourWindow;
 ///////////////////protos : ///////////////////////////////////////
 int hachage1(char*);
 int hachage2(char*);
@@ -134,7 +158,7 @@ int identification(llist** ,ptr_t_vols *arbrevol);
 */
 void inscrire(InscrireWindow *,InscrireWindow *);
 
-int f_principale(ptr_t_client,ptr_t_vols *arbrevol);
+int f_principale(ptr_t_client,ptr_t_vols *arbrevol,llist** tabDH);
 /** @function f_principale
 * @brief fonction affichant la fenetre principale + callbacks
 * @version 1.0
@@ -155,6 +179,7 @@ char* gen_cle2(char* , char* , long , long );
 void * ajout_client(char* table_champ[], int , void * );
 llist ajouterEnTete(llist , void * );
 void clic (GtkWidget* ,VolsWindow* n);
+int choix_jour(VolsWindow* pf1,int i);
 //
 //GtkWidget* affiche_vol(GtkWidget*);
 
