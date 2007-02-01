@@ -1,5 +1,8 @@
 #include "../structure.h"
 #include "interface.h"
+#include "../temps/temps.h"
+#include <time.h>
+
 ///////////////////////////////////////
 int identification(llist* TDH[],ptr_t_vols *arbrevol)
 {
@@ -322,9 +325,10 @@ for(i=0; i< pf->nbr; i++)
 }//FIN VOLS /////////////
 
 //////////////Temps /////////////:
+/*
 int choix_jour(VolsWindow* pf1,int i)
 {
-    /*Declaration et initialisation fenetre */
+    //Declaration et initialisation fenetre 
     
     JourWindow *pf;
     pf = g_malloc(sizeof(JourWindow));
@@ -345,17 +349,102 @@ int choix_jour(VolsWindow* pf1,int i)
     gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 100 , 170);
     gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Choix Jour");
 
-    /* CREATION */
+    //CREATION 
 
     //creation zone de saisie: pour clé et mot_de_passe
     pf->pJour = gtk_entry_new_with_max_length(2); 
+    
+
+     //Creation des boutons 
+    pf->pValider= gtk_button_new_with_label("Valider");
+    
+    //Création Label
+    pf->pLabel= gtk_label_new("Dans combien de jour souhaitez vous prendre le vol?");
+    
+     //Creation et insertion de la table 7 lignes 2 colonne 
+    pf->pTable=gtk_table_new(3,2,TRUE);
+    gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
+
+
+    //TABLE: Insertion des champs .. 
+    //label explication:
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pLabel,
+        0, 2, 0, 1,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+    
+        
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pJour,
+        0, 1, 1, 2,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pValider,
+        1, 2, 2, 3,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+
+
+    //On lance les CALLBACKS :
+    
+    //g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(verif_champs),(gpointer*) pf);
+    //g_signal_connect(G_OBJECT(pf->pinscrire), "clicked", G_CALLBACK(inscription),(gpointer*) pf);
+    g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
+
+
+    ///
+    // Affichage de la fenetre 
+    gtk_widget_show_all(pf->pWindow);
+
+    // Demarrage de la boucle evenementielle 
+    gtk_main();
+
+    g_free(pf);
+
+    return EXIT_SUCCESS;
+}//Fin tps
+*/
+int choix_jour(VolsWindow* pf1,int i)
+{
+    /*Declaration et initialisation fenetre */
+    int k;
+    JourWindow *pf;
+    pf = g_malloc(sizeof(JourWindow));
+    t_temps tmp;
+    
+    tmp.courant = time(NULL);
+    
+    pf->arbrevol = pf1->arbrevol;
+    pf->client = pf1->client;
+    pf->tabDH = pf1->tabDH;
+    
+    
+    gtk_init(0,0);
+
+
+    pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 100 , 170);
+    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Choix Jour");
+
+    /* CREATION */
+
+    //crea combobox
+    pf->pCombo = gtk_combo_box_new();
+    pf->pJour = gtk_combo_box_new_text();
+    
+    for (k=1;k<=31;k++)
+    {
+        gtk_combo_box_insert_text(pf->pJour,k,date(&tmp,k));
+    }    
+    
     
 
     /* Creation des boutons */
     pf->pValider= gtk_button_new_with_label("Valider");
     
     //Création Label
-    pf->pLabel= gtk_label_new("Dans combien de jour souhaitez vous prendre le vol?");
+    pf->pLabel= gtk_label_new("Selectionez le jour de votre vol");
     
     /* Creation et insertion de la table 7 lignes 2 colonne */
     pf->pTable=gtk_table_new(3,2,TRUE);
@@ -386,7 +475,7 @@ int choix_jour(VolsWindow* pf1,int i)
     //g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(verif_champs),(gpointer*) pf);
     //g_signal_connect(G_OBJECT(pf->pinscrire), "clicked", G_CALLBACK(inscription),(gpointer*) pf);
     g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
-
+    //g_signal_connect(G_OBJECT(pf->pCombo), "clicked", G_CALLBACK(clic_choix_jour),0);
 
     ///
     /* Affichage de la fenetre */

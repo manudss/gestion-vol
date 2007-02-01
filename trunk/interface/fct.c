@@ -184,5 +184,22 @@ void clic (GtkWidget* a,VolsWindow* pf)
 
 }
 
+/*
+void clic_choix_jour (GtkWidget* a,VolsWindow* pf)
+{
+    int i=0,btn=-1;
+    
+    //printf("\ni = %ld",pf->i);
+    while (btn == -1 && i < pf->nbr)
+    {
+        if(gtk_combo_box_get_active(pf->pJour)) btn = i;
+        if (btn != -1)
+                {     
+                   choix_jour(pf, btn);
+                }      
+        i++;
+    }
 
+}
+*/
 
