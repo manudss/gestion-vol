@@ -4,6 +4,7 @@
 #include "chargement/chargement.h"
 #include "temps/temps.h"
 
+
 int main()
 {
 	llist *listeclient = NULL;
@@ -16,32 +17,25 @@ int main()
 
     // gestion du temps
     t_temps temps;
-    time_t now = time (NULL);
-    now = now + 5184000;
-   struct tm tm_now = *localtime (&now);
-   char s[64];
-
-   strftime (s, sizeof s, "%A %d %B %H h %M:%S", &tm_now);
-   printf ("Aujourd'hui : %s\n", s);
 
 
+    temps.debut = time (NULL);
+    //temps.courant = time (NULL);
+    temps.deb = *localtime (&temps.debut);
 
+    // On charge le derniers temps courant lors de la précédentes fermetures
+    lecturetemps (&temps);
 
-    /*
-    t_temps temps;
-    struct tm tm_now;
-   char s[64];
+    printf("bonjour, on est le : ");
+    puts( quelheure(&temps) );
 
-    tm_now = *localtime (&temps.deb);
-   strftime (s, sizeof s, "%d/%m/%Y", &tm_now);
-   printf ("Aujourd'hui : %s\n", s);
-    */
-    //temps = quelheure(temps.deb);
+    puts( ajoutertemps(&temps, 60*60*24) );
 
 
 
 
-system("pause");
+
+//system("pause");
 
 
 
@@ -95,8 +89,9 @@ system("pause");
 
     //identification ((llist**)listeclient);
 
-    identification ((llist**)listeclient, arbrevol);
+    //identification ((llist**)listeclient, arbrevol);
 
+    puts( quelheure(&temps) );
 
 	return 0;
 }

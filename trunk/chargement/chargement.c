@@ -296,21 +296,12 @@ void * ajout_vols (char* table_champ[], int nbr_champ, void * liste, void * list
     nouveau->dest[6] = '\0';
 
     puts(nouveau->dest);
-
-    printf("\n--------------la destination : --------------\n");
-    puts(nouveau->code_vol);
-
     strcpy( nouveau->code_vol, table_champ[0] );
 
     strcpy(nouveau->avion, table_champ[1] );
-    printf("\n--------------la destination : --------------\n");
-    puts(nouveau->code_vol);
     nouveau->nbr_client = atoi( table_champ[2] );
-    printf("\n--------------la destination : --------------\n");
-    puts(nouveau->code_vol);
     nouveau->horaire = atoi( table_champ[3] );
-    printf("\n--------------la destination : --------------\n");
-    puts(nouveau->code_vol);
+
 
     for (i = 0; i < 31; i ++)  // Mise à zéro des jours seront chargé plus tard
     {

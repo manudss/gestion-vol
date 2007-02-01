@@ -190,14 +190,37 @@ typedef t_vols* ptr_t_vols;  // pointeur vers un vols
 * @brief Une union permettant de stocké n'importe quel pointeur de structure
 *
 * @param
-*
-*/
+//struct tm {
+//
+//  int tm_sec;   /* Secondes */
+//
+//  int tm_min;   /* Minutes */
+//
+//  int tm_hour;  /* Heures (0 - 23) */
+//
+//  int tm_mday;  /* Quantième du mois (1 - 31) */
+//
+//  int tm_mon;   /* Mois (0 - 11) */
+//
+//  int tm_year;  /* An (année calendaire - 1900) */
+//
+//  int tm_wday;  /* Jour de semaine (0 - 6  Dimanche = 0) */
+//
+//  int tm_yday;  /* Jour dans l'année (0 - 365) */
+//
+//  int tm_isdst; /* 1 si "daylight saving time" */
+//
+//};
+//*
+//*/
 
 typedef struct temps
 {
     int jour;
-    time_t heure;
-    time_t deb;
+    time_t courant;
+    struct tm  cour;
+    time_t debut;
+    struct tm  deb;
 
 }t_temps;
 
