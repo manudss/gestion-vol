@@ -7,7 +7,13 @@
 
 */
 
-ptr_t_temps quelheure(ptr_t_temps temps);
+char * quelheure(ptr_t_temps temps);
+
+char * ajoutertemps(ptr_t_temps temps, long t_plus);
+
+void sauvgardetemps (ptr_t_temps temps);
+
+void lecturetemps (ptr_t_temps temps);
 
 
 #endif
