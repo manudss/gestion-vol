@@ -83,7 +83,7 @@ if (OK==1)
  {
  //
  gtk_main_quit();
- f_principale(pf->client,pf->arbrevol,pf->tabDH);  
+ f_principale(pf->client,pf->arbrevol,pf->tabDH,pf->temps);  
  }
   
 }
@@ -163,10 +163,10 @@ printf("tab[%ld] : %s\n",i,tab[i]);
 
 ajout_client(tab, 8 , pf->tabDH);
 //
-identification(pf->tabDH,pf->arbrevol);
+identification(pf->tabDH,pf->arbrevol,pf->temps);
 }
 
-
+/////////////////CLIC VOLS////////////
 void clic (GtkWidget* a,VolsWindow* pf)
 {
     int i=0,btn=-1;
@@ -177,29 +177,22 @@ void clic (GtkWidget* a,VolsWindow* pf)
         if(gtk_toggle_button_get_active (pf->pChoix[i])!=0) btn = i;
         if (btn != -1)
                 {     
-                   choix_jour(pf, btn);
+                   choix_jour(pf, pf->tab[btn]);
                 }      
         i++;
     }
 
 }
 
-/*
-void clic_choix_jour (GtkWidget* a,VolsWindow* pf)
+////////CHOIX JOUR ////////////
+void clic_choix_jour (GtkWidget* a,JourWindow* pf)
 {
     int i=0,btn=-1;
+    DBG
     
-    //printf("\ni = %ld",pf->i);
-    while (btn == -1 && i < pf->nbr)
-    {
-        if(gtk_combo_box_get_active(pf->pJour)) btn = i;
-        if (btn != -1)
-                {     
-                   choix_jour(pf, btn);
-                }      
-        i++;
-    }
-
+    btn =gtk_combo_box_get_active(pf->pCombo);
+    
+    enregistrement_vols ( pf->client,pf->vol, btn, &(pf->temps));
 }
-*/
+
 

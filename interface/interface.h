@@ -26,6 +26,7 @@ typedef struct _ident_Window
     
     ptr_t_client client;
     llist** tabDH;
+    t_temps temps;
 }Window_ident;
 /////////////////////////////
 typedef struct _MainWindow
@@ -53,7 +54,7 @@ typedef struct _MainWindow
     ptr_t_vols *arbrevol;
     t_client* client;
     llist** tabDH;
-
+    t_temps temps;
     
 }MainWindow;
 
@@ -79,6 +80,8 @@ GtkWidget *pmot_de_passe2;
 
 GtkWidget *pvalider;
 
+t_temps temps;
+t_client* client;
 ptr_t_vols *arbrevol;
 llist** tabDH;
 
@@ -104,6 +107,7 @@ GtkWidget *pScrollbar;//scrollbar
 ptr_t_vols *arbrevol;
 llist** tabDH;
 t_client* client;
+t_temps temps;
 
 ptr_t_vols *tab;
 }VolsWindow;
@@ -117,13 +121,15 @@ GtkWidget *pWindow;
 
 GtkWidget *pLabel;
 GtkWidget *pTable;
-GtkWidget *pJour;
+GtkWidget *pJour; 
 GtkWidget *pCombo;
 GtkWidget *pValider;
 
 t_client* client;
 ptr_t_vols *arbrevol;
 llist** tabDH;
+t_temps temps;
+
 ptr_t_vols vol;
 
 }JourWindow;
@@ -146,7 +152,7 @@ void verif_champs(Window_ident *, Window_ident* );
 * On pourrait externaliser la partie de parcours de la liste chainée pour comparer la clé et le mdp au t_client...
 */
 
-int identification(llist** ,ptr_t_vols *arbrevol);
+int identification(llist** ,ptr_t_vols *arbrevol,t_temps temps);
 /** @function identification
 * @brief fonction affichant la fenetre de connexion et callbacks
 * @version 1.0
@@ -159,7 +165,7 @@ int identification(llist** ,ptr_t_vols *arbrevol);
 */
 void inscrire(InscrireWindow *,InscrireWindow *);
 
-int f_principale(ptr_t_client,ptr_t_vols *arbrevol,llist** tabDH);
+int f_principale(ptr_t_client,ptr_t_vols *arbrevol,llist** tabDH,t_temps temps);
 /** @function f_principale
 * @brief fonction affichant la fenetre principale + callbacks
 * @version 1.0
@@ -179,8 +185,9 @@ void inscription(Window_ident *,Window_ident *);
 char* gen_cle2(char* , char* , long , long );
 void * ajout_client(char* table_champ[], int , void * );
 llist ajouterEnTete(llist , void * );
-void clic (GtkWidget* ,VolsWindow* n);
-int choix_jour(VolsWindow* pf1,int i);
+void clic (GtkWidget* ,VolsWindow* n);//fct
+int choix_jour(VolsWindow* pf1,ptr_t_vols vol);//fenetre
+void clic_choix_jour (GtkWidget* a,JourWindow* pf);//fct
 //
 //GtkWidget* affiche_vol(GtkWidget*);
 
