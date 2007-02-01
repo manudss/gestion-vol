@@ -94,7 +94,7 @@ system("pause");
 
     //identification ((llist**)listeclient);
 
-    identification ((llist**)listeclient, arbrevol);
+    identification ((llist**)listeclient, arbrevol,temps);
 
     puts( quelheure(&temps) );
 

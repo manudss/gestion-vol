@@ -4,7 +4,7 @@
 #include <time.h>
 
 ///////////////////////////////////////
-int identification(llist* TDH[],ptr_t_vols *arbrevol)
+int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
 {
     /*Declaration et initialisation fenetre */
 
@@ -16,6 +16,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol)
 
     pf = g_malloc(sizeof(Window_ident));
     pf->arbrevol = arbrevol ; //aquisition de l'arbre .
+    pf->temps = temps;
     gtk_init(0,0);
 
 
@@ -111,7 +112,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol)
     return EXIT_SUCCESS;
 }
 /////////////////////////////////////////////
-int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH)
+int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps temps)
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
@@ -121,15 +122,17 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH)
  pf->arbrevol = arbrevol;
  pf->tabDH = tabDH;
  pf->client =client;
+ pf->temps =temps;
  
  gtk_init(0,0);
 
 
  pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
- gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
- gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 1100, 850);
- gtk_window_maximize((GtkWindow*)pf->pWindow);
+ gtk_window_set_position(GTK_WINDOW(pf->pWindow),GTK_WIN_POS_NONE);
+ gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 980, 850);
+ gtk_window_move(GTK_WINDOW(pf->pWindow), 1, 1);
+ //gtk_window_maximize((GtkWindow*)pf->pWindow);
  gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INTERFACE t_client");
 
 
@@ -237,15 +240,17 @@ cpt=0;
 
 printf("\nENTREE DANS VOLS");
 pf = (VolsWindow*)g_malloc(sizeof(VolsWindow));
-//passage d'éléments ..
+
+//=>passage d'éléments ..
 pf->arbrevol = pf1->arbrevol;
 pf->tabDH = pf1->tabDH;
 pf->client =pf1->client;
+pf->temps = pf1->temps;
 
 
 pf->nbr = nbr_elmt(pf->arbrevol);
 printf("pf->nbr de champ %ld\n",pf->nbr);
-pf->tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * pf->nbr);
+pf->tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * pf->nbr);//
 parcourttotab( pf->arbrevol, pf->tab, &n);
 
 
@@ -258,8 +263,8 @@ pf->pWindow= gtk_window_new(GTK_WINDOW_TOPLEVEL);
 //gtk_scrolled_window_add_with_viewport((GtkScrolledWindow*)pf->pWindow,pf->pTable);
 
 gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
-gtk_window_move(GTK_WINDOW(pf->pWindow), 500, 400);
-gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 900, 600);
+gtk_window_move(GTK_WINDOW(pf->pWindow), 300, 300);
+gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 660, 530);
 //gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
 gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : Reservation Vols");
 pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
@@ -324,100 +329,22 @@ for(i=0; i< pf->nbr; i++)
 
 }//FIN VOLS /////////////
 
-//////////////Temps /////////////:
-/*
-int choix_jour(VolsWindow* pf1,int i)
-{
-    //Declaration et initialisation fenetre 
-    
-    JourWindow *pf;
-    pf = g_malloc(sizeof(JourWindow));
-    
-    pf->arbrevol = pf1->arbrevol;
-    pf->client = pf1->client;
-    pf->tabDH = pf1->tabDH;
-
-    
-    
-    
-    
-    gtk_init(0,0);
-
-
-    pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
-    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 100 , 170);
-    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Choix Jour");
-
-    //CREATION 
-
-    //creation zone de saisie: pour clé et mot_de_passe
-    pf->pJour = gtk_entry_new_with_max_length(2); 
-    
-
-     //Creation des boutons 
-    pf->pValider= gtk_button_new_with_label("Valider");
-    
-    //Création Label
-    pf->pLabel= gtk_label_new("Dans combien de jour souhaitez vous prendre le vol?");
-    
-     //Creation et insertion de la table 7 lignes 2 colonne 
-    pf->pTable=gtk_table_new(3,2,TRUE);
-    gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
-
-
-    //TABLE: Insertion des champs .. 
-    //label explication:
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pLabel,
-        0, 2, 0, 1,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-    
-        
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pJour,
-        0, 1, 1, 2,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pValider,
-        1, 2, 2, 3,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-
-
-    //On lance les CALLBACKS :
-    
-    //g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(verif_champs),(gpointer*) pf);
-    //g_signal_connect(G_OBJECT(pf->pinscrire), "clicked", G_CALLBACK(inscription),(gpointer*) pf);
-    g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
-
-
-    ///
-    // Affichage de la fenetre 
-    gtk_widget_show_all(pf->pWindow);
-
-    // Demarrage de la boucle evenementielle 
-    gtk_main();
-
-    g_free(pf);
-
-    return EXIT_SUCCESS;
-}//Fin tps
-*/
-int choix_jour(VolsWindow* pf1,int i)
+//////////////////CHOIX JOUR ///////////////////////////
+int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
 {
     /*Declaration et initialisation fenetre */
     int k;
     JourWindow *pf;
-    pf = g_malloc(sizeof(JourWindow));
-    t_temps tmp;
     
-    tmp.courant = time(NULL);
+    pf = g_malloc(sizeof(JourWindow));
+    
+    pf->temps=pf1->temps;
+    //tmp.courant = time(NULL);
     
     pf->arbrevol = pf1->arbrevol;
     pf->client = pf1->client;
     pf->tabDH = pf1->tabDH;
-    
+    pf->vol = vol;
     
     gtk_init(0,0);
 
@@ -430,12 +357,13 @@ int choix_jour(VolsWindow* pf1,int i)
     /* CREATION */
 
     //crea combobox
-    pf->pCombo = gtk_combo_box_new();
-    pf->pJour = gtk_combo_box_new_text();
+    pf->pCombo = gtk_combo_box_new_text();
+    //pf->pJour = gtk_combo_box_new_text();
     
     for (k=1;k<=31;k++)
     {
-        gtk_combo_box_insert_text(pf->pJour,k,g_locale_to_utf8(date(&tmp,k), -1, NULL, NULL, NULL));
+        
+        gtk_combo_box_insert_text( pf->pCombo,k, g_locale_to_utf8( date(&pf->temps,k), -1, NULL, NULL, NULL ));
     }    
     
     
@@ -459,8 +387,8 @@ int choix_jour(VolsWindow* pf1,int i)
         0, 0);
     
         
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pJour,
-        0, 1, 1, 2,
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pCombo,
+        0, 2, 1, 2,
         GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
 
@@ -472,10 +400,8 @@ int choix_jour(VolsWindow* pf1,int i)
 
     //On lance les CALLBACKS :
     
-    //g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(verif_champs),(gpointer*) pf);
-    //g_signal_connect(G_OBJECT(pf->pinscrire), "clicked", G_CALLBACK(inscription),(gpointer*) pf);
     g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
-    //g_signal_connect(G_OBJECT(pf->pCombo), "clicked", G_CALLBACK(clic_choix_jour),0);
+    g_signal_connect(G_OBJECT(pf->pCombo), "changed", G_CALLBACK(clic_choix_jour),(gpointer*) pf);
 
     ///
     /* Affichage de la fenetre */

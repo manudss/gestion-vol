@@ -11,6 +11,9 @@ llist ** ptr;
 ptr=(pf1->tabDH);
 pf->tabDH = ptr;
 pf->arbrevol = pf1->arbrevol;
+pf->temps =pf1->temps;
+pf->client = pf1->client;
+
 //(pf->tabDH) =(pf1->tabDH);
 printf("DBG inscription \n");
 /*
