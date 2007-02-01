@@ -31,11 +31,16 @@ int main()
 
     puts( ajoutertemps(&temps, 60*60*24) );
 
+    for (i = 1; i <=31; i ++)
+    {
+        puts( date (&temps, i));
+    }
 
 
 
 
-//system("pause");
+
+system("pause");
 
 
 
@@ -89,7 +94,7 @@ int main()
 
     //identification ((llist**)listeclient);
 
-    //identification ((llist**)listeclient, arbrevol);
+    identification ((llist**)listeclient, arbrevol);
 
     puts( quelheure(&temps) );
 
