@@ -15,5 +15,7 @@ void sauvgardetemps (ptr_t_temps temps);
 
 void lecturetemps (ptr_t_temps temps);
 
+char * date (ptr_t_temps temps, int i);
+
 
 #endif

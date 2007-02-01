@@ -72,6 +72,20 @@ char * ajoutertemps(ptr_t_temps temps, long t_plus)
     return retour;
 }
 
+char * date (ptr_t_temps temps, int i)
+{
+    char * retour;
+    char s[64];
+    t_temps tmp;
+
+    tmp.courant = temps->courant;
+    tmp.courant += i*60*60*24;
+    tmp.cour = *localtime (&tmp.courant);
+    strftime (s, sizeof s, "%A %d %B", &(tmp.cour));
+    retour = strdup(&s);
+    return retour;
+}
+
 
 
 //int tm_sec;   /* Secondes */
