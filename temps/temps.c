@@ -103,7 +103,7 @@ void sauvgardetemps (ptr_t_temps temps)
 
     if (fichtemps != NULL)
     {
-        fprintf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", temps->cour.tm_sec, temps->cour.tm_min ,
+        fprintf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", temps->cour.tm_sec, temps->cour.tm_min ,
         temps->cour.tm_hour ,temps->cour.tm_mday , temps->cour.tm_mon , temps->cour.tm_year , temps->cour.tm_wday ,
         temps->cour.tm_yday , temps->cour.tm_isdst,temps->jour);
     }
@@ -122,10 +122,11 @@ void lecturetemps (ptr_t_temps temps)
     fichtemps = fopen("temps.txt", "r");
     if (fichtemps != NULL)
     {
-        fscanf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", &(temps->cour.tm_sec), &(temps->cour.tm_min) ,
+        fscanf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", &(temps->cour.tm_sec), &(temps->cour.tm_min) ,
         &(temps->cour.tm_hour) ,&(temps->cour.tm_mday) , &(temps->cour.tm_mon) , &(temps->cour.tm_year) , &(temps->cour.tm_wday) ,
         &(temps->cour.tm_yday) , &(temps->cour.tm_isdst),&(temps->jour));
         temps->courant = mktime(&temps->cour);
+        printf("\ntemps->jours :%ld",temps->jour);
     }
     else
     {

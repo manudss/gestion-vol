@@ -35,11 +35,11 @@ int main()
     {
         puts( date (&temps, i));
     }
-    system("pause");
+    
 
 */
-
-
+printf("\ntemps : %ld",temps.jour);
+ system("pause");
 
 
     // fin temps
