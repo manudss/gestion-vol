@@ -21,7 +21,7 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
     vol->jour[lejour].liste_client = ajouterEnTete(vol->jour[lejour].liste_client, client->cle);
     vol->jour[lejour].nbr_client ++;
     strcpy(codevol, vol->code_vol);
-    jour = date (temps, lejour);
+    jour = date (temps, temps->jour);
     strcat(codevol, jour);
     jour = strdup(codevol);
     client->vols = ajouterEnTete(client->vols, jour);
