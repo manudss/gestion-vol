@@ -10,6 +10,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
 
     Window_ident *pf;
 
+    
     GtkWidget *pLabel_cle;
     GtkWidget *pLabel_mot_de_passe;
 
@@ -111,19 +112,19 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
 
     return EXIT_SUCCESS;
 }
-/////////////////////////////////////////////
+///////////////// F_PRINCIPALE ////////////////////////////
 int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps temps)
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
-
+ 
  pf = g_malloc(sizeof(MainWindow));
  //RECOPIE CHP UTILES :
  pf->arbrevol = arbrevol;
  pf->tabDH = tabDH;
  pf->client =client;
  pf->temps =temps;
- 
+ DBG
  gtk_init(0,0);
 
 
@@ -136,14 +137,14 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INTERFACE t_client");
 
 
-
+ DBG
  //menu:
  pf->pMenuBar= gtk_menu_bar_new();
  pf->pMenu= gtk_menu_new();
  pf->pMenuItem= gtk_menu_item_new_with_label("Quitter");
  g_signal_connect(G_OBJECT(pf->pMenuItem), "activate", G_CALLBACK(OnQuitter), (GtkWidget*) pf->pWindow);
  gtk_menu_shell_append(GTK_MENU_SHELL(pf->pMenu), pf->pMenuItem);
-
+ DBG
  pf->pMenuItem = gtk_menu_item_new_with_label("Fichier");
  gtk_menu_item_set_submenu(GTK_MENU_ITEM(pf->pMenuItem),pf->pMenu);
  gtk_menu_shell_append(GTK_MENU_SHELL(pf->pMenuBar), pf->pMenuItem);
@@ -156,18 +157,18 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  //creation boutons
  pf->pres= gtk_button_new_with_label("Reserver vol");
  pf->pvol= gtk_button_new_with_label("Mes vols");
- pf->pff= gtk_button_new_with_label("FF ?");
-
+ pf->pff= gtk_button_new_with_label("Frequent flyer");
+ DBG
  // créa pLabel
  pf->pLabel_bienvenue = gtk_label_new("Bienvenue sur votre interface client");
- pf->pLabel_msg = gtk_label_new(client->message);
-
+ 
+DBG
  /* Creation et insertion de la table 14 lignes 4 colonnes */
  pf->pTable=gtk_table_new(14,4,TRUE);
  gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
 
  /*TABLE: Insertion des champs .. */
-
+ DBG
  //menu
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pMenuBar,
  0, 4, 0, 1,
@@ -179,12 +180,14 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  1, 3, 1, 2,
  0,0,
        0, 0);
+ /*
  //message personnalisé du t_client ("t_client.message")
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel_msg,
  1, 3, 2, 5,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
         0, 0);
 
+ */
  //image air-efrei
 /*
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pImage,
@@ -209,13 +212,14 @@ GTK_EXPAND | GTK_FILL, GTK_EXPAND,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
         15, 25);
 
-
-
+ printf("[Vol ]nom client: ");
+    puts(pf->client->nom);
+DBG
  /*Callbacks: */
- 
  g_signal_connect(G_OBJECT(pf->pres), "clicked", G_CALLBACK(vols),(gpointer*) pf);
+ g_signal_connect(G_OBJECT(pf->pvol), "clicked", G_CALLBACK(affiche_vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
-
+DBG
 
  /* Affichage de la fenetre */
  gtk_widget_show_all(pf->pWindow);
@@ -247,10 +251,9 @@ pf->tabDH = pf1->tabDH;
 pf->client =pf1->client;
 pf->temps = pf1->temps;
 
-
 pf->nbr = nbr_elmt(pf->arbrevol);
 printf("pf->nbr de champ %ld\n",pf->nbr);
-pf->tab = (ptr_t_vols) malloc(sizeof( ptr_t_vols ) * pf->nbr);//
+pf->tab = (ptr_t_vols*) malloc(sizeof( ptr_t_vols ) * pf->nbr);//
 parcourttotab( pf->arbrevol, pf->tab, &n);
 
 
@@ -322,96 +325,11 @@ for(i=0; i< pf->nbr; i++)
  /* Demarrage de la boucle evenementielle */
  gtk_main();
 
- printf("\ni : %ld\t cpt : %ld\n",i,cpt);
+ //printf("\ni : %ld\t cpt : %ld\n",i,cpt);
 
 
  g_free(pf);
 
 }//FIN VOLS /////////////
 
-//////////////////CHOIX JOUR ///////////////////////////
-int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
-{
-    /*Declaration et initialisation fenetre */
-    int k;
-    JourWindow *pf;
-    
-    pf = g_malloc(sizeof(JourWindow));
-    
-    pf->temps=pf1->temps;
-    //tmp.courant = time(NULL);
-    
-    pf->arbrevol = pf1->arbrevol;
-    pf->client = pf1->client;
-    pf->tabDH = pf1->tabDH;
-    pf->vol = vol;
-    
-    gtk_init(0,0);
-
-
-    pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
-    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 100 , 170);
-    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Choix Jour");
-
-    /* CREATION */
-
-    //crea combobox
-    pf->pCombo = gtk_combo_box_new_text();
-    //pf->pJour = gtk_combo_box_new_text();
-    
-    for (k=1;k<=31;k++)
-    {
-        
-        gtk_combo_box_insert_text( pf->pCombo,k, g_locale_to_utf8( date(&pf->temps,k), -1, NULL, NULL, NULL ));
-    }    
-    
-    
-
-    /* Creation des boutons */
-    pf->pValider= gtk_button_new_with_label("Valider");
-    
-    //Création Label
-    pf->pLabel= gtk_label_new("Selectionez le jour de votre vol");
-    
-    /* Creation et insertion de la table 7 lignes 2 colonne */
-    pf->pTable=gtk_table_new(3,2,TRUE);
-    gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
-
-
-    /*TABLE: Insertion des champs .. */
-    //label explication:
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pLabel,
-        0, 2, 0, 1,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-    
-        
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pCombo,
-        0, 2, 1, 2,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-
-    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pValider,
-        1, 2, 2, 3,
-        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
-        0, 0);
-
-
-    //On lance les CALLBACKS :
-    
-    g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
-    g_signal_connect(G_OBJECT(pf->pCombo), "changed", G_CALLBACK(clic_choix_jour),(gpointer*) pf);
-
-    ///
-    /* Affichage de la fenetre */
-    gtk_widget_show_all(pf->pWindow);
-
-    /* Demarrage de la boucle evenementielle */
-    gtk_main();
-
-    g_free(pf);
-
-    return EXIT_SUCCESS;
-}//Fin tps
 

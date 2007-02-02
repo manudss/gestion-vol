@@ -56,13 +56,13 @@ void verif_champs(Window_ident *p, Window_ident* pf)
   
 pf->client =(ptr_t_client) recherche((void*)sText_cle ,(llist) pf->tabDH[ hachage((char*)sText_cle) ] , &recherch_client_par_cle);
 
-printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,pf->client->mot_de_passe);
-if(pf->client != 0 && strcmp(sText_mot_de_passe,pf->client->mot_de_passe)==0 )
+//printf("MOT DE PASSE ??\n%s\n%s",pf->pmot_de_passe,pf->client->mot_de_passe);
+if(pf->client != 0 && strcmp(sText_mot_de_passe,pf->client->mot_de_passe)==0)
      {
-     
+     DBG
      OK=1;
      printf("LE client EXISTE !!\n"); //[CONSOLE]
-     gtk_label_set_text((GtkLabel*)pf->pLabel_info,"LOGIN OK");
+     //gtk_label_set_text((GtkLabel*)pf->pLabel_info,"LOGIN OK");
      }
 
 
@@ -82,8 +82,10 @@ if (OK==0)
 if (OK==1) 
  {
  //
- gtk_main_quit();
- f_principale(pf->client,pf->arbrevol,pf->tabDH,pf->temps);  
+// gtk_main_quit();
+ f_principale(pf->client,pf->arbrevol,pf->tabDH,pf->temps);
+ gtk_widget_destroy(pf->pWindow);
+   
  }
   
 }
@@ -99,7 +101,7 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
  ptr_t_client ptr;
  long i,j=0,ERR=0;
  
- printf("%s\n",recup_chp (pf->pprenom));
+ //printf("%s\n",recup_chp (pf->pprenom));
  // 0 : clé
  tab[0]=strdup(gen_cle2(recup_chp (pf->pnom), recup_chp(pf->pprenom) , (long)atoi((char*)recup_chp(pf->ptel)) , 0));
  //1 : nom
@@ -127,8 +129,9 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
  {
  while (j<strlen(tab[i]))
      {
+     
      j++;
-     if((tab[i][j])==';'||(tab[i][j])== '"'  )
+     if((tab[i][j])==';'||(tab[i][j])== '"' )
          {
          printf("ERREUR! [inscription]: mauvais caractere insere !\n");
          ERR=1;
@@ -139,9 +142,13 @@ void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
      {
         //on signale le pb
         gtk_label_set_text((GtkLabel*)pf->pLabel_info,"Veuillez entrez des caracteres alphanumeriques !");
-        //on vide les champs :
-        //gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe,"");
-        //gtk_entry_set_text((GtkEntry*)pf->pmot_de_passe2,"");
+        if (pf->pnom == "" || pf->ptel ==0 || pf->pprenom == "")
+        {
+        printf("\n!erreur inscrire : chp non renseigne");
+        gtk_label_set_text((GtkLabel*)pf->pLabel_info,"Veuillez saisir les chp nom prenom et tel!");
+        }    
+        
+        
      } 
  } 
  
@@ -162,7 +169,10 @@ printf("tab[%ld] : %s\n",i,tab[i]);
 }
 
 ajout_client(tab, 8 , pf->tabDH);
-//
+
+ 
+ gtk_widget_destroy(pf->pWindow);
+
 identification(pf->tabDH,pf->arbrevol,pf->temps);
 }
 
@@ -188,11 +198,13 @@ void clic (GtkWidget* a,VolsWindow* pf)
 void clic_choix_jour (GtkWidget* a,JourWindow* pf)
 {
     int i=0,btn=-1;
-    DBG
     
+    
+    gtk_widget_destroy(pf->pWindow);
     btn =gtk_combo_box_get_active(pf->pCombo);
     
     enregistrement_vols ( pf->client,pf->vol, btn, &(pf->temps));
+    
 }
 
 

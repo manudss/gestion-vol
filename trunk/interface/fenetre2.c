@@ -1,5 +1,234 @@
 #include "../structure.h"
 #include "interface.h"
+
+
+//////////affiche_vol /////////////
+void affiche_vols(MainWindow* a, MainWindow* pf1)
+{
+    
+    Affiche_vol_Window *pf;
+        
+    
+    int i=0;
+    int cpt;
+    int n=0;
+    cpt=0;
+
+    llist ptr;
+    
+
+    
+    printf("\nENTREE DANS AFFICHE VOL\n");
+    pf = (Affiche_vol_Window*)g_malloc(sizeof(Affiche_vol_Window));
+    
+    //=>passage d'éléments ..
+    
+    //pf->arbrevol = pf1->arbrevol;
+    pf->tabDH = pf1->tabDH;
+    
+    pf->client =pf1->client;
+    
+    printf("[affiche vol ]nom client:");
+    puts(pf->client->nom);
+    
+    
+    pf->temps = pf1->temps;
+    
+    
+    ptr = pf->client->vols;
+    
+    
+    while(ptr!=NULL)
+    {
+        printf("i :%ld; ptr->suiv : %ld",i, &ptr->suiv);
+        ptr=ptr->suiv;
+        DBG
+        i++;
+        DBG
+    }
+    DBG
+        
+    
+    
+    pf->pSuppr = (GtkWidget**)g_malloc(sizeof(GtkWidget)* i);
+    pf->pLabel2 = (GtkWidget**)g_malloc(sizeof(GtkWidget)* i);
+    DBG
+    gtk_init(0,0);
+    pf->pWindow= gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    //pf->pWindow =gtk_scrolled_window_new(NULL,NULL);
+    //gtk_scrolled_window_add_with_viewport((GtkScrolledWindow*)pf->pWindow,pf->pTable);
+    
+    gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
+    gtk_window_move(GTK_WINDOW(pf->pWindow), 300, 300);
+    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 660, 530);
+    //gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
+    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : Vos vols reservés");
+    //pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
+    
+    //gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
+    
+     /* Creation et insertion de la table */
+     pf->pTable = gtk_table_new(i,5,FALSE);
+     gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
+     //gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pf->pScrollbar), pf->pTable);
+    
+    ptr = pf->client->vols;
+     // Boucle création table ...
+     
+     for (cpt=0;cpt<i;cpt++)
+         {
+         //Boutons
+         pf->pSuppr[i] = gtk_toggle_button_new_with_label("Supprimer");
+         
+         
+         //labels ..
+         pf->pLabel2[i]=gtk_label_new((char *) ptr->data) ;
+          
+            //pf->pLabel2[i]=gtk_label_new("test") ;               
+         ptr=ptr->suiv;
+    
+         /*label: vol*/
+         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel2[i],
+         0, 4, cpt, cpt+1,
+         GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
+               0, 0);
+    
+         // bouton reservation vol
+         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pSuppr[i],
+         4, 5, cpt, cpt+1,
+         GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+                15, 25);
+    
+    
+         }
+    
+    
+    
+     /*Callbacks: */
+    
+    for(cpt=0; cpt< i; cpt++)
+     {
+      //g_signal_connect(G_OBJECT(pf->pSuppr[i]), "clicked", G_CALLBACK(clic),(gpointer*) pf);
+     }
+    
+     //g_signal_connect(G_OBJECT(pf->pChoix[1]), "clicked", G_CALLBACK(clic),&cpt);
+     
+     g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
+     
+    
+    
+     /* Affichage de la fenetre */
+     gtk_widget_show_all(pf->pWindow);
+    
+     /* Demarrage de la boucle evenementielle */
+     gtk_main();
+    
+     
+     g_free(pf);
+    
+  
+}//Fin affiche_vol
+
+
+///////////////////////////////
+
+//////////////////CHOIX JOUR ///////////////////////////
+int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
+{
+    /*Declaration et initialisation fenetre */
+    int k;
+    JourWindow *pf;
+    
+    pf = g_malloc(sizeof(JourWindow));
+    
+    pf->temps=pf1->temps;
+    //tmp.courant = time(NULL);
+    
+    pf->arbrevol = pf1->arbrevol;
+    pf->client = pf1->client;
+    pf->tabDH = pf1->tabDH;
+    pf->vol = vol;
+    
+    gtk_init(0,0);
+
+
+    pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 100 , 170);
+    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Choix Jour");
+
+    /* CREATION */
+
+    //crea combobox
+    pf->pCombo = gtk_combo_box_new_text();
+    //pf->pJour = gtk_combo_box_new_text();
+    
+    for (k=1;k<=31;k++)
+    {
+        
+        gtk_combo_box_insert_text((GtkComboBox*) pf->pCombo,k, g_locale_to_utf8((const gchar*) date(&pf->temps,k), -1, NULL, NULL, NULL ));
+    }    
+    
+    
+
+    /* Creation des boutons */
+    
+    
+    //Création Label
+    pf->pLabel= gtk_label_new("Selectionez le jour de votre vol");
+    
+    /* Creation et insertion de la table 7 lignes 2 colonne */
+    pf->pTable=gtk_table_new(3,2,TRUE);
+    gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
+
+
+    /*TABLE: Insertion des champs .. */
+    //label explication:
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pLabel,
+        0, 2, 0, 1,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+    
+        
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pCombo,
+        0, 2, 1, 2,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+
+    /*
+    gtk_table_attach(GTK_TABLE(pf->pTable), pf->pValider,
+        1, 2, 2, 3,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+
+    */
+    
+    //On lance les CALLBACKS :
+    
+   
+    
+    g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
+    g_signal_connect(G_OBJECT(pf->pCombo), "changed", G_CALLBACK(clic_choix_jour),(gpointer*) pf);
+
+    ///
+    /* Affichage de la fenetre */
+    
+    gtk_widget_destroy(pf1->pWindow);
+    gtk_widget_show_all(pf->pWindow);
+
+    /* Demarrage de la boucle evenementielle */
+    gtk_main();
+
+    g_free(pf);
+
+    return EXIT_SUCCESS;
+}//Fin tps
+
+
+
+
+
+
 //INSCRIPTION///////////********************************************
 void inscription(Window_ident *p,Window_ident *pf1)
 {
@@ -29,6 +258,7 @@ const gchar*mot_de_passe1;
 const gchar*mot_de_passe2;
 
 */
+
 gtk_init(0,0);
 
 
@@ -172,6 +402,7 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(inscrire),(gpointer*) pf);
 
  /* Affichage de la fenetre */
+ gtk_widget_destroy(pf1->pWindow); //destruction fenetre parent
  gtk_widget_show_all(pf->pWindow);
 
  /* Demarrage de la boucle evenementielle */
