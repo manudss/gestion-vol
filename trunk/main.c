@@ -27,15 +27,15 @@ int main()
     lecturetemps (&temps);
 
     printf("bonjour, on est le : ");
-    puts( quelheure(&temps) );
+    puts( quelheure(&temps, listeclient, arbrevol,listeavion, listedestination) );
 
-    puts( ajoutertemps(&temps, 60*60*24) );
+    puts( ajoutertemps(&temps, 60*60*24,listeclient, arbrevol,listeavion, listedestination) );
 /*
     for (i = 1; i <=31; i ++)
     {
         puts( date (&temps, i));
     }
-    
+
 
 */
 printf("\ntemps : %ld",temps.jour);
@@ -91,7 +91,7 @@ printf("\ntemps : %ld",temps.jour);
 
     identification ((llist**)listeclient, arbrevol,temps);
 
-    puts( quelheure(&temps) );
+    puts( quelheure(&temps, listeclient, arbrevol,listeavion, listedestination) );
 
 	return 0;
 }

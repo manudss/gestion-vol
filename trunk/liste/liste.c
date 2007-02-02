@@ -136,7 +136,7 @@ void afficherListe(llist liste, void *(afficher) (void *))
 
     printf("effacer liste\n");
 
-    if (strcmp(aeffacer , (char *) tmp->data) == 0 && tmp != NULL)  // cas en tête
+    if (strstr((char *) tmp->data, aeffacer ) != 0 && tmp != NULL)  // cas en tête
     {
         liste = liste->suiv;
         // effacement de la structure.
@@ -148,7 +148,7 @@ void afficherListe(llist liste, void *(afficher) (void *))
     {
 
         tmpprec = tmp->suiv;
-        if (strcmp(aeffacer , (char *) tmp->data) == 0 )
+        if (strstr((char *) tmp->data, aeffacer ) != 0 )
         {
             tmpprec->suiv = tmp->suiv;
             // effacement de la structure.
