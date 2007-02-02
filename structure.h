@@ -27,7 +27,21 @@ typedef struct t_adresse
 
 }t_adresse;
 
+/** @struct  element
+* @brief structure d'une liste chainée générale
+*
+* @param
+*
+*/
+typedef struct element element;
+struct element
+{
+    void *data;
+    struct element *suiv;
+};
 
+
+typedef element* llist;
  /** @struct  t_client
 * @brief Structure d'un client
 * @version 1.0
@@ -47,10 +61,10 @@ typedef struct t_client
 	char *prenom; 							// le prénom du client
 	long tel; 								//numéro de téléphone
 	struct t_adresse adresse;				// L'adresse du client
-	char *message; 							// les messages éventuels pour le client
+	
 	// Compagnie
 	struct t_ff *ff;						// Liens vers Fréquent Flyer, NULL si pas fréquent flyer
-	struct t_historique_vols *vols;						// Liens vers l'historique des vols en cours , NULL si aucun vols
+	llist *vols;						// Liens vers l'historique des vols en cours , NULL si aucun vols
 
 }t_client;
 
@@ -72,7 +86,7 @@ typedef struct t_ff
     char cle[11];   // Les Deux premières lettres du prénom + les deux premières du nom + 4 derniers chiffres du numéro de tél +  FF si frequent flyer NN si non fréquent Flyer + 1 chiffre pour éviter les doublons
 	long points;  // Les points Fréquent Flyer acumulé
 	long km;  // Les kilomètres éffectués
-	struct t_historique_vols *vols;  // Pointeur vers une liste chainée des vols éffectués
+	llist *vols;  // Pointeur vers une liste chainée des vols éffectués
 
 }t_ff;
 
@@ -116,22 +130,6 @@ typedef struct t_destination
 
 typedef t_destination* ptr_t_destination;  // pointeur vers une destination
 
-/** @struct  element
-* @brief structure d'une liste chainée générale
-*
-* @param
-*
-*/
-
-typedef struct element element;
-struct element
-{
-    void *data;
-    struct element *suiv;
-};
-
-
-typedef element* llist;
 
  /** @struct  t_liste_client
 * @brief liste chainée des clients pour un vol rangé par jour.

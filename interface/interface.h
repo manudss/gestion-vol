@@ -52,7 +52,7 @@ typedef struct _MainWindow
     GtkWidget *pLabel_msg;
     
     ptr_t_vols *arbrevol;
-    t_client* client;
+    ptr_t_client client;
     llist** tabDH;
     t_temps temps;
     
@@ -108,8 +108,8 @@ ptr_t_vols *arbrevol;
 llist** tabDH;
 t_client* client;
 t_temps temps;
-
 ptr_t_vols *tab;
+
 }VolsWindow;
 
 /////////////Temps ///////
@@ -123,7 +123,7 @@ GtkWidget *pLabel;
 GtkWidget *pTable;
 GtkWidget *pJour; 
 GtkWidget *pCombo;
-GtkWidget *pValider;
+
 
 t_client* client;
 ptr_t_vols *arbrevol;
@@ -133,6 +133,24 @@ t_temps temps;
 ptr_t_vols vol;
 
 }JourWindow;
+
+////////////////AFFICHE_VOLS //////////////////
+typedef struct affiche_vol
+{
+
+GtkWidget *pWindow;
+
+GtkWidget **pLabel2;
+GtkWidget *pTable;
+GtkWidget **pSuppr; 
+GtkWidget *pScrollbar;
+
+//ptr_t_vols *arbrevol;
+llist** tabDH;
+ptr_t_client client;
+t_temps temps;
+
+}Affiche_vol_Window;
 ///////////////////protos : ///////////////////////////////////////
 int hachage1(char*);
 int hachage2(char*);
@@ -188,6 +206,7 @@ llist ajouterEnTete(llist , void * );
 void clic (GtkWidget* ,VolsWindow* n);//fct
 int choix_jour(VolsWindow* pf1,ptr_t_vols vol);//fenetre
 void clic_choix_jour (GtkWidget* a,JourWindow* pf);//fct
+void affiche_vols(MainWindow* a, MainWindow* pf1); //fenetre
 //
 //GtkWidget* affiche_vol(GtkWidget*);
 
