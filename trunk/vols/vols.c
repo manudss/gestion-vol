@@ -1,3 +1,4 @@
+#include <math.h>
 #include "../structure.h"
 #include "../recherche/recherche.h"
 
@@ -11,20 +12,30 @@
 int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t_temps temps)
 {
 
+        DBG
     t_temps tmp;
     char *codevol[50];
     char *jour= NULL;
+    int tabjour;
+    
 
     tmp.courant = temps->courant;
-    lejour = (lejour + temps->jour) %31;
-
-    vol->jour[lejour].liste_client = ajouterEnTete(vol->jour[lejour].liste_client, client->cle);
-    vol->jour[lejour].nbr_client ++;
+    tabjour = (lejour + temps->jour) %31;
+    vol->jour[tabjour].liste_client = ajouterEnTete(vol->jour[tabjour].liste_client, client->cle);
+    vol->jour[tabjour].nbr_client ++;
     strcpy(codevol, vol->code_vol);
-    jour = date (temps, temps->jour);
+    printf("\nJour [enregistrement_vol] :%ld\n",lejour+1);
+    DBG
+    jour = date (temps, lejour+1);
+    DBG
+    strcat(codevol, "  ->  le ");
     strcat(codevol, jour);
+    DBG
     jour = strdup(codevol);
+    DBG
+        
     client->vols = ajouterEnTete(client->vols, jour);
+       
     printf("\nENREGISTREMENT VOL [OK] %s", jour);
     return 1;
 }
