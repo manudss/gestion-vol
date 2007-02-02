@@ -27,6 +27,7 @@ typedef struct t_adresse
 
 }t_adresse;
 
+
 /** @struct  element
 * @brief structure d'une liste chainée générale
 *
@@ -34,6 +35,7 @@ typedef struct t_adresse
 *
 */
 typedef struct element element;
+
 struct element
 {
     void *data;
@@ -41,7 +43,10 @@ struct element
 };
 
 
+
+
 typedef element* llist;
+
  /** @struct  t_client
 * @brief Structure d'un client
 * @version 1.0
@@ -61,7 +66,7 @@ typedef struct t_client
 	char *prenom; 							// le prénom du client
 	long tel; 								//numéro de téléphone
 	struct t_adresse adresse;				// L'adresse du client
-	
+
 	// Compagnie
 	struct t_ff *ff;						// Liens vers Fréquent Flyer, NULL si pas fréquent flyer
 	llist *vols;						// Liens vers l'historique des vols en cours , NULL si aucun vols
@@ -129,6 +134,7 @@ typedef struct t_destination
 
 
 typedef t_destination* ptr_t_destination;  // pointeur vers une destination
+
 
 
  /** @struct  t_liste_client

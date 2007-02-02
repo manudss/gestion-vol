@@ -10,7 +10,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
 
     Window_ident *pf;
 
-    
+
     GtkWidget *pLabel_cle;
     GtkWidget *pLabel_mot_de_passe;
 
@@ -117,14 +117,16 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
- 
+
  pf = g_malloc(sizeof(MainWindow));
  //RECOPIE CHP UTILES :
  pf->arbrevol = arbrevol;
  pf->tabDH = tabDH;
  pf->client =client;
+
  pf->temps =temps;
  DBG
+
  gtk_init(0,0);
 
 
@@ -161,7 +163,7 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  DBG
  // créa pLabel
  pf->pLabel_bienvenue = gtk_label_new("Bienvenue sur votre interface client");
- 
+
 DBG
  /* Creation et insertion de la table 14 lignes 4 colonnes */
  pf->pTable=gtk_table_new(14,4,TRUE);
@@ -194,7 +196,7 @@ DBG
  0, 1, 1, 6,
 GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
-*/ 
+*/
  // bouton reserve vol
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pres,
  0, 1, 6, 9,
@@ -216,6 +218,7 @@ GTK_EXPAND | GTK_FILL, GTK_EXPAND,
     puts(pf->client->nom);
 DBG
  /*Callbacks: */
+
  g_signal_connect(G_OBJECT(pf->pres), "clicked", G_CALLBACK(vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pvol), "clicked", G_CALLBACK(affiche_vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
@@ -225,7 +228,7 @@ DBG
  gtk_widget_show_all(pf->pWindow);
 
  /* Demarrage de la boucle evenementielle */
- 
+
  gtk_main();
  g_free(pf);
 
@@ -314,9 +317,9 @@ for(i=0; i< pf->nbr; i++)
  }
 
  //g_signal_connect(G_OBJECT(pf->pChoix[1]), "clicked", G_CALLBACK(clic),&cpt);
- 
+
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
- 
+
 
 
  /* Affichage de la fenetre */
@@ -331,5 +334,6 @@ for(i=0; i< pf->nbr; i++)
  g_free(pf);
 
 }//FIN VOLS /////////////
+
 
 

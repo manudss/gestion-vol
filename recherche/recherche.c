@@ -28,19 +28,13 @@ void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* acherch
 
     while(liste != NULL && ok != 1 )
     {
-
         //puts(&liste->data);
-
         printf("liste->data : %ld\n", liste->data);
-
 		cherche = fct_rech(achercher, liste->data);
-
     	if(cherche != NULL)
     	{
-
-    	    tmp = (llist) cherche;
+            tmp = (llist) cherche;
     	    printf("trouver");
-
     	    ok=1;
     	    return liste->data;
     	}

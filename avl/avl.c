@@ -88,38 +88,32 @@ void rotationdroitegauche ( ptr_t_vols *A )
 int ajoutavl(ptr_t_vols x, ptr_t_vols *B)
 {
     int		cmp = 0;
-//
+
 	if (B == NULL)
 		printf("B == NULL\n");
     else printf("listevol : %ld\n", (*B));
 	if ((*B) == NULL)
 	{
-//
 		*B = x;   // On  ajoute le lien
 		(*B)->balance = 0;
 		return 1;
 	}
 	else
 	{
-//
 	    printf("b->code_vol : %s\n", (*B)->code_vol);
 	    printf("x->code_vol : %s\n", x->code_vol);
 	    cmp = strcmp( x->code_vol, (*B)->code_vol);
 	    printf("cmp = %i", cmp);
-
 		if (cmp == 0 )  // Si il  existe déjà
 			return 0;						// on renvoie 0 pour dire qu'il existe déjà
 		else
 		{
-//
 			if ( cmp <  0 )
 			{
-//
 				if ( ajoutavl(x, &((*B)->fg) ) == 0 )
 					return 0;
 				else
 				{
-//
 				    (*B)->balance = (*B)->balance + 1;
 					if ( (*B)->balance == 2 )
 					{
@@ -133,13 +127,10 @@ int ajoutavl(ptr_t_vols x, ptr_t_vols *B)
 			}
 			else
 			{
-			//	printf("b->fd : %ld", (*B)->fd );
-//
 				if ( ajoutavl(x, &((*B)->fd) ) == 0 )
 					return 0;
 				else
 				{
-//
 					(*B)->balance = (*B)->balance - 1;
 					if ( (*B)->balance == -2 )
 					{
@@ -282,45 +273,7 @@ ptr_t_vols   init_listevols (char *codevol)
     return nouvvols;
 }
 
-/*
 
-int main()
-{
-	ptr_t_vols listevol = NULL;
-
-	//listevol = init_listeclient ("A");
-	//printf("listevol : %ld\n", listevol);
-	//printf("Filsdroit : %ld\n", listevol->fd);
-
-
-	ajout( init_listeclient ("A"), &listevol);
-	printf("listevol : %ld\n", listevol);
-    ajout( init_listeclient ("B"), &listevol);
-    printf("listevol : %ld\n", listevol);
-    ajout( init_listeclient ("D"), &listevol);
-    ajout( init_listeclient ("F"), &listevol);
-    ajout( init_listeclient ("Z"), &listevol);
-	ajout( init_listeclient ("Y"), &listevol);
-	ajout( init_listeclient ("M"), &listevol);
-	ajout( init_listeclient ("G"), &listevol);
-	ajout( init_listeclient ("L"), &listevol);
-	ajout( init_listeclient ("E"), &listevol);
-	ajout( init_listeclient ("G"), &listevol);
-	ajout( init_listeclient ("H"), &listevol);
-	ajout( init_listeclient ("I"), &listevol);
-	ajout( init_listeclient ("K"), &listevol);
-	ajout( init_listeclient ("O"), &listevol);
-	ajout( init_listeclient ("X"), &listevol);
-	ajout( init_listeclient ("W"), &listevol);
-	ajout( init_listeclient ("N"), &listevol);
-	ajout( init_listeclient ("Q"), &listevol);
-	ajout( init_listeclient ("R"), &listevol);
-
-
-    system("pause");
-	return 0;
-}
-*/
 
 //Recherche stoque chaque
 int parcourttotab(ptr_t_vols a, ptr_t_vols tab[], int *n )
@@ -329,11 +282,8 @@ int parcourttotab(ptr_t_vols a, ptr_t_vols tab[], int *n )
 	 printf("n = %ld", *n);
 	 if( a != NULL)
 	 {
-		 printf("parcourttotab");
-		 parcourttotab(a->fg, tab, n);
-
+		parcourttotab(a->fg, tab, n);
 		 tab[*n] = a;
-
 		 printf("tab[%ld]->code_vol : %s\n",  *n , tab[ *n ]->code_vol);
 		 *n = *n + 1;
 		 parcourttotab(a->fd, tab, n);
