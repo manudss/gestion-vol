@@ -10,7 +10,7 @@ void * freet_client ( void * liste);
 
 llist effacerListe(llist liste, void * (fctfree) (void *));
 
- llist effacerelmt(llist liste, char * aeffacer);
+llist effacerelmt(llist liste, char * aeffacer);
 
 void * affiche_client(void * tmp);
 

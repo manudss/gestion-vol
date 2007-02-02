@@ -109,7 +109,7 @@ typedef struct t_avions
 {
     char modele[4];   	// le modèle de l'avion A380; B747; .....
 	long capacite;		// Le nombre de siege dans l'avion
-	long autonomie;		// L'autonomie de l'avion ( le nombre de kilomètre maximale)
+	long autonomie;		// L'autonomie de l'avion ( le nombre de kilomètre maximal)
 }t_avions;
 
 typedef t_avions* ptr_t_avions;  // pointeur vers un avion

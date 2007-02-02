@@ -2,7 +2,7 @@
 #include <math.h>
 #include "../temps/temps.h"
 
-char * quelheure(ptr_t_temps temps)
+char * quelheure(ptr_t_temps temps, llist TDH[], ptr_t_vols arbre, llist listeavion, llist listedest)
 {
     t_temps tmp;
     int difjour;
@@ -46,16 +46,15 @@ char * quelheure(ptr_t_temps temps)
         while ( difjour == 0);
         //enregistrement ( );    // enregistrement dans les fichiers
         sauvgardetemps (temps);
-
     }
     return retour;
 }
 
-char * ajoutertemps(ptr_t_temps temps, long t_plus)
+char * ajoutertemps(ptr_t_temps temps, long t_plus,llist listeclient[],ptr_t_vols arbrevol,llist listeavion,llist listedestination)
 {
     char * retour;
     temps->courant += t_plus;
-    retour = quelheure(temps);
+    retour = quelheure(temps,listeclient, arbrevol,listeavion, listedestination);
     return retour;
 }
 
