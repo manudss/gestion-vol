@@ -1,5 +1,6 @@
 #include "../structure.h"
 #include <math.h>
+#include "../temps/temps.h"
 
 char * quelheure(ptr_t_temps temps)
 {
@@ -11,19 +12,7 @@ char * quelheure(ptr_t_temps temps)
     char *retour;
     struct tm tm_now;
 
-
-
-
-
     temps->deb = *localtime (&temps->debut);
-
-    /*
-    strftime (s, sizeof s, "%A %d %B %Hh%M", &(temps->deb));
-    printf ("Le temps du début : %s\n", s);
-
-    strftime (s, sizeof s, "%A %d %B %Hh%M", &(temps->cour));
-    printf ("Temps courant  : %s\n", s);
-    */
 
     // avoir l'heure du jour suivant à minuit
     tmp.courant = temps->courant + 60*60*24;
@@ -42,24 +31,22 @@ char * quelheure(ptr_t_temps temps)
     retour = strdup(&s);
 
 
-
-
-
-
-
-    if (difftime(temps->courant,tmp.courant) >= 0 )          // Si on a changer de jour
+    if (difjour = difftime(temps->courant,tmp.courant) >= 0 )          // Si on a changer de jour
     {
         printf("Changement de jour : sauvegarde, vieullez patienter ......\n");
-       /* do
-        {
 
-            effacementjour ( );    // effacement des jours dans l'arbre avl
-            effacementcolsclient( ); // effacement dans la liste des vols en cours du client
+
+        do
+        {
+            temps->jour = (temps->jour + 1) % 31;
+            //effacementjour ( );    // effacement des jours dans l'arbre avl
+            //effacementvolsclient( ); // effacement dans la liste des vols en cours du client
             difjour --;
-        while ( difjour != 0)
-        enregistrement ( );    // enregistrement dans les fichiers
-        sauvgardetemps (temps)
-        */
+        }
+        while ( difjour == 0);
+        //enregistrement ( );    // enregistrement dans les fichiers
+        sauvgardetemps (temps);
+
     }
     return retour;
 }
@@ -116,14 +103,15 @@ void sauvgardetemps (ptr_t_temps temps)
 
     if (fichtemps != NULL)
     {
-        fprintf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", temps->cour.tm_sec, temps->cour.tm_min ,
+        fprintf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", temps->cour.tm_sec, temps->cour.tm_min ,
         temps->cour.tm_hour ,temps->cour.tm_mday , temps->cour.tm_mon , temps->cour.tm_year , temps->cour.tm_wday ,
-        temps->cour.tm_yday , temps->cour.tm_isdst);
+        temps->cour.tm_yday , temps->cour.tm_isdst,temps->jour);
     }
     else
     {
         printf("Impossible d'ouvrir le fichier temps.txt\n");
     }
+    fclose(fichtemps);
 
 }
 
@@ -134,15 +122,16 @@ void lecturetemps (ptr_t_temps temps)
     fichtemps = fopen("temps.txt", "r");
     if (fichtemps != NULL)
     {
-        fscanf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", &(temps->cour.tm_sec), &(temps->cour.tm_min) ,
+        fscanf(fichtemps,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", &(temps->cour.tm_sec), &(temps->cour.tm_min) ,
         &(temps->cour.tm_hour) ,&(temps->cour.tm_mday) , &(temps->cour.tm_mon) , &(temps->cour.tm_year) , &(temps->cour.tm_wday) ,
-        &(temps->cour.tm_yday) , &(temps->cour.tm_isdst));
+        &(temps->cour.tm_yday) , &(temps->cour.tm_isdst),&(temps->jour));
         temps->courant = mktime(&temps->cour);
     }
     else
     {
         printf("Impossible d'ouvrir le fichier temps.txt\n");
     }
+    fclose(fichtemps);
 
 }
 

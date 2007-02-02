@@ -55,6 +55,11 @@ void * freet_client ( void * liste)
     return NULL;
 }
 
+void * generic ( void * liste)
+{
+    return NULL;
+}
+
 void * freet_avions ( void * liste)
 {
     t_avions *avion;
@@ -121,3 +126,41 @@ void afficherListe(llist liste, void *(afficher) (void *))
         tmp = tmp->suiv;
     }
  }
+
+
+ llist effacerelmt(llist liste, char * aeffacer)
+{
+    element* tmp = liste;
+    element* tmpprec = liste;
+    int fin = 0;
+
+    printf("effacer liste\n");
+
+    if (strcmp(aeffacer , (char *) tmp->data) == 0 && tmp != NULL)  // cas en tête
+    {
+        liste = liste->suiv;
+        // effacement de la structure.
+        tmp->data = NULL;
+        free(tmp);
+        fin = 1;
+    }
+    while(tmp != NULL || fin != 0)
+    {
+
+        tmpprec = tmp->suiv;
+        if (strcmp(aeffacer , (char *) tmp->data) == 0 )
+        {
+            tmpprec->suiv = tmp->suiv;
+            // effacement de la structure.
+            tmp->data = NULL;
+            free(tmp);
+            fin = 1;
+        }
+        else
+        {
+            tmpprec = tmp;
+            tmp = tmp->suiv;
+        }
+    }
+    return liste;
+}

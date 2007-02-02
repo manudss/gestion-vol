@@ -30,19 +30,14 @@ int main()
     puts( quelheure(&temps) );
 
     puts( ajoutertemps(&temps, 60*60*24) );
-
+/*
     for (i = 1; i <=31; i ++)
     {
         puts( date (&temps, i));
     }
+    system("pause");
 
-
-
-
-
-system("pause");
-
-
+*/
 
 
 
