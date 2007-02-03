@@ -33,6 +33,28 @@ ajoutertemps(pf->temps,itps,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destinati
 
 //////////////FIN HEURE FCT_PRINCIPALE
 
+void inscription_info(GtkWidget *pBtn, gpointer pf)
+{
+    GtkWidget *pAbout;
+
+    // Creation de la boite de message 
+    //Type : Information -> GTK_MESSAGE_INFO 
+    // Bouton : 1 OK -> GTK_BUTTONS_OK 
+    pAbout = gtk_message_dialog_new (GTK_WINDOW(pf),
+        GTK_DIALOG_MODAL,
+        GTK_MESSAGE_INFO,
+        GTK_BUTTONS_OK,
+        "Votre nouvelle clef est: %s\ Merci de la conserver",
+        pf);
+
+    // Affichage de la boite de message 
+    gtk_dialog_run(GTK_DIALOG(pAbout));
+
+    // Destruction de la boite de message 
+    gtk_widget_destroy(pAbout);
+}
+
+
 void OnDestroy(GtkWidget* widget, gpointer data)
 {
 //arret boucle evenementielle :
@@ -201,6 +223,7 @@ printf("tab[%ld] : %s\n",i,tab[i]);
 
 ajout_client(tab, 8 , pf->tabDH);
 
+//inscription_info(0, tab[0] );
  
  gtk_widget_destroy(pf->pWindow);
 
@@ -213,11 +236,18 @@ void clic (GtkWidget* a,VolsWindow* pf)
     int i=0,btn=-1;
     
     //printf("\ni = %ld",pf->i);
+    DBG
     while (btn == -1 && i < pf->nbr)
     {
-        if(gtk_toggle_button_get_active (pf->pChoix[i])!=0) btn = i;
+        if(gtk_toggle_button_get_active (pf->pChoix[i])!=0) 
+        {
+        
+            btn = i;
+            
+        }    
         if (btn != -1)
                 {     
+                   
                    choix_jour(pf, pf->tab[btn]);
                 }      
         i++;
@@ -242,23 +272,32 @@ void clic_suppr(GtkWidget* a, Affiche_vol_Window* pf)
 {
     int btn=-1;
     int i=0;
-    
+    DBG
     //printf("\npf->pLabel2[%ld]:%s|",btn,pf->pLabel2[1]);
     gtk_widget_destroy(pf->pWindow);
+    DBG
     char * codevol;
-    
+    DBG
+    printf("\npf->nbr:%ld",pf->nbr);
     while (btn == -1 && i < pf->nbr)
     {
-        if(gtk_toggle_button_get_active (pf->pSuppr[i])!=0) btn = i;
+        if(gtk_toggle_button_get_active (pf->pSuppr[i])!=0)
+        { 
+                DBG
+                printf("\nLE BOUTON %ld EST CLICKE",i);
+                btn = i;
+        }    
         if (btn != -1)
                 {     
 
                    DBG
-                   printf(" nb clic_suppr : %ld",btn);
+                   printf(" Suppr clic_suppr : %ld",btn);
+                   btn = btn+1;
                    pf->client->vols = effacervol(pf->client->vols, btn);
                    
                    
                 }      
+        DBG
         i++;
     }
 
