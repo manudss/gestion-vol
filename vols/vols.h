@@ -8,7 +8,9 @@
 
 */
 
-int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t_temps temps);
+int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t_temps temps, ptr_t_destination listedest);
+
+void effacementvolsclient(ptr_t_client client, char * code);
 
 
 #endif
