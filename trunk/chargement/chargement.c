@@ -131,6 +131,8 @@ void * ajout_client(char* table_champ[], int nbr_champ, void * liste, void * lis
     nouveau->adresse.adresse = table_champ[5];
     nouveau->adresse.ville = table_champ[6];
     nouveau->adresse.pays = table_champ[7];
+    nouveau->ff = NULL;
+    nouveau->vols = NULL;
 
 
     TDH[indice] = ajouterEnTete(TDH[indice], nouveau);

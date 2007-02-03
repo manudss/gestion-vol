@@ -88,8 +88,10 @@ printf("\ntemps : %ld",temps.jour);
 
 
     //identification ((llist**)listeclient);
-
-    identification ((llist**)listeclient, arbrevol,temps);
+    
+    printf("MAIN :temps %ld",&temps);
+    system("pause");
+    identification ((llist**)listeclient, arbrevol,&temps,listedestination,listeavion);
 
     puts( quelheure(&temps, listeclient, arbrevol,listeavion, listedestination) );
 

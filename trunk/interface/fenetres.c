@@ -4,7 +4,7 @@
 #include <time.h>
 
 ///////////////////////////////////////
-int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
+int identification(llist* TDH[],ptr_t_vols *arbrevol,ptr_t_temps temps,llist destination,llist listeavion)
 {
     /*Declaration et initialisation fenetre */
 
@@ -18,6 +18,9 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
     pf = g_malloc(sizeof(Window_ident));
     pf->arbrevol = arbrevol ; //aquisition de l'arbre .
     pf->temps = temps;
+    pf->destination=destination;
+    pf->listeavion=listeavion;
+    
     gtk_init(0,0);
 
 
@@ -113,7 +116,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,t_temps temps)
     return EXIT_SUCCESS;
 }
 ///////////////// F_PRINCIPALE ////////////////////////////
-int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps temps)
+int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,ptr_t_temps temps,llist destination,llist listeavion)
 {
  /*Declaration et init de la fenetre .. */
  MainWindow* pf;
@@ -123,7 +126,8 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  pf->arbrevol = arbrevol;
  pf->tabDH = tabDH;
  pf->client =client;
-
+ pf->destination = destination;
+ pf->listeavion = listeavion;
  pf->temps =temps;
  DBG
 
@@ -133,7 +137,7 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
  gtk_window_set_position(GTK_WINDOW(pf->pWindow),GTK_WIN_POS_NONE);
- gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 980, 850);
+ gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 800, 800);
  gtk_window_move(GTK_WINDOW(pf->pWindow), 1, 1);
  //gtk_window_maximize((GtkWindow*)pf->pWindow);
  gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INTERFACE t_client");
@@ -152,34 +156,61 @@ int f_principale(ptr_t_client client,ptr_t_vols *arbrevol,llist** tabDH,t_temps 
  gtk_menu_shell_append(GTK_MENU_SHELL(pf->pMenuBar), pf->pMenuItem);
 
  //init image:
- //pf->pImage = gtk_image_new_from_file("logo2.png");
+ pf->pImage = gtk_image_new_from_file("logo2.png");
 
- pf->pBox=gtk_vbox_new(FALSE,5);
+ //pf->pBox=gtk_vbox_new(FALSE,5);
 
- //creation boutons
+ //creation boutons && heure ..
  pf->pres= gtk_button_new_with_label("Reserver vol");
  pf->pvol= gtk_button_new_with_label("Mes vols");
  pf->pff= gtk_button_new_with_label("Frequent flyer");
+ pf->pafficheh=gtk_button_new_with_label("afficher\nheure");
+ pf->p1h=gtk_button_new_with_label("+1h");
+ pf->p1j=gtk_button_new_with_label("+1J");
+ pf->pvalidh=gtk_button_new_with_label("changer\nheure");
+ pf->pchph = gtk_entry_new ();
+ 
  DBG
  // créa pLabel
  pf->pLabel_bienvenue = gtk_label_new("Bienvenue sur votre interface client");
 
 DBG
  /* Creation et insertion de la table 14 lignes 4 colonnes */
- pf->pTable=gtk_table_new(14,4,TRUE);
+ pf->pTable=gtk_table_new(14,13,TRUE);
  gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
 
  /*TABLE: Insertion des champs .. */
  DBG
  //menu
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pMenuBar,
- 0, 4, 0, 1,
+ 0, 13, 0, 1,
  GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
        0, 0);
-
+ 
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pafficheh,
+ 10, 11, 1, 2,
+ GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+       0, 0);
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->p1h,
+ 11, 12, 1, 2,
+ GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+       0, 0);
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->p1j,
+ 12, 13, 1, 2,
+ GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+       0, 0);
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pchph,
+ 10, 12, 2, 3,
+ GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+       0, 0);
+ gtk_table_attach(GTK_TABLE(pf->pTable),pf->pvalidh,
+ 12, 13, 2, 3,
+ GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+       0, 0);
+ 
  //message de Bienvenue GENERIQUE:
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel_bienvenue,
- 1, 3, 1, 2,
+ 4, 9, 1, 2,
  0,0,
        0, 0);
  /*
@@ -191,26 +222,26 @@ DBG
 
  */
  //image air-efrei
-/*
+
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pImage,
- 0, 1, 1, 6,
+ 0, 4, 1, 6,
 GTK_EXPAND | GTK_FILL, GTK_EXPAND,
         0, 0);
-*/
+
  // bouton reserve vol
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pres,
- 0, 1, 6, 9,
+ 0, 3, 6, 9,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
         15, 25);
 
  //bouton mes vols:
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pvol,
- 0, 1, 9, 12,
+ 0, 3, 9, 12,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
         15, 25);
  //bouton FF: Facultatif ..
  gtk_table_attach(GTK_TABLE(pf->pTable),pf->pff,
- 0, 1, 12, 15,
+ 0, 3, 12, 15,
  GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
         15, 25);
 
@@ -219,9 +250,16 @@ GTK_EXPAND | GTK_FILL, GTK_EXPAND,
 DBG
  /*Callbacks: */
 
+ g_signal_connect(G_OBJECT(pf->pafficheh), "clicked", G_CALLBACK(afficheh),(gpointer*) pf);
+ g_signal_connect(G_OBJECT(pf->p1h), "clicked", G_CALLBACK(p1h),(gpointer*) pf);
+ g_signal_connect(G_OBJECT(pf->p1j), "clicked", G_CALLBACK(p1j),(gpointer*) pf);
+ g_signal_connect(G_OBJECT(pf->pvalidh), "clicked", G_CALLBACK(validh),(gpointer*) pf);
+ 
  g_signal_connect(G_OBJECT(pf->pres), "clicked", G_CALLBACK(vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pvol), "clicked", G_CALLBACK(affiche_vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
+ 
+ 
 DBG
 
  /* Affichage de la fenetre */
@@ -242,6 +280,7 @@ VolsWindow *pf;
 int i;
 int cpt;
 int n=0;
+char label[300];
 
 cpt=0;
 
@@ -253,6 +292,7 @@ pf->arbrevol = pf1->arbrevol;
 pf->tabDH = pf1->tabDH;
 pf->client =pf1->client;
 pf->temps = pf1->temps;
+pf->destination = pf1->destination;
 
 pf->nbr = nbr_elmt(pf->arbrevol);
 printf("pf->nbr de champ %ld\n",pf->nbr);
@@ -290,7 +330,14 @@ gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
      pf->pChoix[i] = gtk_toggle_button_new_with_label("Choisir");
 
      //labels ..
-     *(pf->pLabel2+i)=gtk_label_new(pf->tab[i]->code_vol) ;
+     printf("------------------    Fenetre : pf->tab[i]->code_vols  %s------------", pf->tab[i]->dest);
+     DBG
+     strcpy(label,g_locale_to_utf8((const gchar *) affichevols(pf->destination, pf->tab[i]),-1,NULL,NULL,NULL));
+     DBG
+     strcat(label,pf->tab[i]->code_vol);
+     DBG
+     *(pf->pLabel2+i)=gtk_label_new(label) ;
+     //*(pf->pLabel2+i)=gtk_label_new(pf->tab[i]->code_vol) ;
 
      /*label: vol*/
      gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel2[i],
@@ -307,7 +354,7 @@ gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
 
      }
 
-
+    
 
  /*Callbacks: */
 

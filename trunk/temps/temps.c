@@ -11,9 +11,10 @@ char * quelheure(ptr_t_temps temps, llist TDH[], ptr_t_vols arbre, llist listeav
     char s[64];
     char *retour;
     struct tm tm_now;
-
+    
+    printf("\nquelheure temps%ld\n",temps);
+    
     temps->deb = *localtime (&temps->debut);
-
     // avoir l'heure du jour suivant à minuit
     tmp.courant = temps->courant + 60*60*24;
     tmp.cour = *localtime (&tmp.courant);
@@ -21,21 +22,21 @@ char * quelheure(ptr_t_temps temps, llist TDH[], ptr_t_vols arbre, llist listeav
     tmp.cour.tm_min = 0;
     tmp.cour.tm_sec = 0;
     tmp.courant = mktime(&tmp.cour);
-
+    DBG
     delta = difftime(time(NULL),temps->debut);
     temps->courant += abs(delta);
     temps->cour = *localtime (&temps->courant);
-    temps->cour.tm_mday += 31;
+    //temps->cour.tm_mday += 31;
     strftime (s, sizeof s, "%A %d %B %Hh%M", &(temps->cour));
     //printf ("Il est : %s\n", s);
     retour = strdup(&s);
 
-
+    DBG
     if (difjour = difftime(temps->courant,tmp.courant) >= 0 )          // Si on a changer de jour
     {
         printf("Changement de jour : sauvegarde, vieullez patienter ......\n");
 
-
+        DBG
         do
         {
             temps->jour = (temps->jour + 1) % 31;

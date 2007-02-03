@@ -169,7 +169,7 @@ typedef struct t_liste_client
 typedef struct t_vols
 {
     char code_vol[10]; // Le code correespondant au vol c'est à partir ce code qu'est rangé l'arbre AVL
-	char dest[6]; // Le code correspondant à la destination
+	char dest[7]; // Le code correspondant à la destination
 	ptr_t_destination ptr_dest;  // pointeur vers la destination
 	char avion[4]; // Le code correspondant à l'avion
 	ptr_t_avions* ptr_avion;  // pointeur vers l'avion

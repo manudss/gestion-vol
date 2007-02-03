@@ -9,7 +9,9 @@
 llist ajouterEnTete(llist liste, void * valeur)
 {
     llist nouvelElement = malloc(sizeof(element));
+    DBG
     nouvelElement->data = valeur;
+    DBG
     nouvelElement->suiv = liste;
 
     return nouvelElement;
@@ -55,8 +57,9 @@ void * freet_client ( void * liste)
     return NULL;
 }
 
-void * generic ( void * liste)
+void * generic ( void * liste) // 8-)
 {
+
     return NULL;
 }
 
@@ -163,4 +166,37 @@ void afficherListe(llist liste, void *(afficher) (void *))
         }
     }
     return liste;
+}
+
+llist effacervol(llist liste, int i)
+{
+int k;
+llist ptr, ptrprec;
+ptr=liste;
+ptrprec = liste;
+
+if (i == 1 && liste != NULL)  // cas en tête
+{
+    DBG
+    liste = liste->suiv;
+    // effacement de la structure.
+    ptr->data = NULL;
+    free(ptr);
+}
+else if (liste != NULL)
+{    
+    DBG
+    for (k=1;k<i;k++)
+    {
+        printf("effacevol : k :%ld",k);
+        ptrprec = ptr;
+        ptr=ptr->suiv;
+        printf("ptr->suiv %ld",ptr->suiv);
+    }
+    ptrprec->suiv = ptr->suiv;
+    // effacement de la structure.
+    ptr->data = NULL;
+    free(ptr);
+}    
+return liste;
 }
