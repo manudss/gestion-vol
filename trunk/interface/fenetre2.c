@@ -81,7 +81,7 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
          
          
          //labels ..
-         strcpy(label,g_locale_to_utf8((const gchar *) affichevols(pf->destination, ptr->data),-1,NULL,NULL,NULL));
+         strcpy(label,(char*) affichevols(pf->destination, ptr->data));
               DBG
          strcat(label,ptr->data);
            DBG
@@ -290,7 +290,7 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  //creation bouton :
  pf->pvalider = gtk_button_new_with_label("Valider");
 
- /* Creation et insertion de la table 15 lignes 4 colonnes */
+ /* Creation et insertion de la table 17 lignes 2 colonnes */
  pf->pTable=gtk_table_new(17,2,TRUE);
  gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
 
@@ -416,3 +416,77 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  g_free(pf);
 }
 
+void WFF(GtkWidget *a, MainWindow* pf)
+{
+    GtkWidget *pAbout;
+    GtkWidget *pLabel;
+    GtkWidget *pLabel2;
+    GtkWidget *pTable;
+    GtkWidget *pLabel3;
+    
+    char tmp[10];
+    DBG
+    gtk_init(0,0);
+    pAbout = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_position(GTK_WINDOW(pAbout), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(pAbout), 320, 200);
+    gtk_window_set_title(GTK_WINDOW(pAbout), "Frequent flyer");
+    
+    pLabel = gtk_label_new("Vos Points ff : \nVous pourrez les echanger contre un billet gratuit\n");
+    pLabel3 = gtk_label_new("Vous n'etiez pas FrequentFlyer\n Par ce message, nous vous avons a présent inscrit, Vous gagnerez des points lors de vos prochains vols \n");
+    DBG
+    
+    pTable = gtk_table_new(2,1,TRUE);
+    gtk_container_add(GTK_CONTAINER(pAbout), GTK_WIDGET(pTable));
+    
+    DBG
+    
+   
+    
+    
+   DBG 
+ if (pf->client->ff != NULL)
+    {
+     printf("FF : %ld",pf->client->ff->points);
+     itoa(pf->client->ff->points,&tmp,10);
+     DBG
+     
+     pLabel2 = gtk_label_new (tmp);
+     
+     gtk_table_attach(GTK_TABLE(pTable), pLabel,
+        0, 1, 0, 1,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+     DBG
+     
+     
+   DBG 
+    gtk_table_attach(GTK_TABLE(pTable), pLabel2,
+        1, 2, 0, 1,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+    DBG
+    }    
+    
+    else 
+    {
+        DBG
+        pf->client->ff=(t_ff*) malloc (sizeof(t_ff)) ;   
+        pf->client->ff->points = 0;
+        pf->client->ff->vols = NULL;
+        
+        gtk_table_attach(GTK_TABLE(pTable), pLabel3,
+        0, 1, 0, 1,
+        GTK_EXPAND | GTK_FILL, GTK_EXPAND,
+        0, 0);
+        
+    }    
+    DBG
+    // Affichage de la boite de message 
+   gtk_widget_show_all(pAbout);
+
+    /* Demarrage de la boucle evenementielle */
+    gtk_main();
+    DBG
+    g_free(pf);
+}

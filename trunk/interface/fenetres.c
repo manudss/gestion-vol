@@ -27,7 +27,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,ptr_t_temps temps,llist des
     pf->pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 320, 200);
-    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Identification");
+    gtk_window_set_title(GTK_WINDOW(pf->pWindow), "Veuillez saisir vos identifiants");
 
     /* CREATION */
 
@@ -42,7 +42,7 @@ int identification(llist* TDH[],ptr_t_vols *arbrevol,ptr_t_temps temps,llist des
     //Création Label
     pLabel_cle= gtk_label_new("Saisir cle :");
     pLabel_mot_de_passe= gtk_label_new("Saisir mot de passe");
-    pf->pLabel_info= gtk_label_new("Veuillez saisir vos identifiants ");
+    pf->pLabel_info= gtk_label_new("votre cle de client : 2 lettres nom puis prenom, 4 derniers numero du tel + 0\n exemple : NoPr12340  ");
     /* Creation et insertion de la table 7 lignes 2 colonne */
     pf->pTable=gtk_table_new(6,2,TRUE);
     gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
@@ -255,6 +255,7 @@ DBG
  g_signal_connect(G_OBJECT(pf->p1j), "clicked", G_CALLBACK(p1j),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pvalidh), "clicked", G_CALLBACK(validh),(gpointer*) pf);
  
+ g_signal_connect(G_OBJECT(pf->pff), "clicked", G_CALLBACK(WFF),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pres), "clicked", G_CALLBACK(vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pvol), "clicked", G_CALLBACK(affiche_vols),(gpointer*) pf);
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
@@ -277,6 +278,7 @@ return EXIT_SUCCESS;
 void vols(MainWindow *p,MainWindow *pf1)
 {
 VolsWindow *pf;
+
 int i;
 int cpt;
 int n=0;
@@ -364,7 +366,8 @@ for(i=0; i< pf->nbr; i++)
  }
 
  //g_signal_connect(G_OBJECT(pf->pChoix[1]), "clicked", G_CALLBACK(clic),&cpt);
-
+ 
+ 
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
 
 

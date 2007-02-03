@@ -12,13 +12,13 @@ gtk_entry_set_text (pf->pchph, g_locale_to_utf8((const gchar*) quelheure(pf->tem
 void p1h (MainWindow *a, MainWindow *pf)
 {
 
-gtk_entry_set_text (pf->pchph,ajoutertemps(pf->temps,60*60,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination));
+gtk_entry_set_text (pf->pchph,g_locale_to_utf8((const gchar *) ajoutertemps(pf->temps,60*60,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination),-1,NULL,NULL,NULL));
 }
 
 
 void p1j (MainWindow *a, MainWindow *pf)
 {
-gtk_entry_set_text (pf->pchph,ajoutertemps(pf->temps,60*60*24,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination));
+gtk_entry_set_text (pf->pchph,g_locale_to_utf8((const gchar *) ajoutertemps(pf->temps,60*60*24,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination),-1,NULL,NULL,NULL));
 }
 
 void validh (MainWindow *a, MainWindow *pf)
@@ -265,7 +265,7 @@ void clic_choix_jour (GtkWidget* a,JourWindow* pf)
     btn =gtk_combo_box_get_active(pf->pCombo);
     printf("\nCHOIX JOUR : temps :%ld",&(pf->temps));
     enregistrement_vols ( pf->client,pf->vol, btn, &(pf->temps));
-    
+  DBG  
 }
 ////////CHOIX suppr ////////////
 void clic_suppr(GtkWidget* a, Affiche_vol_Window* pf)
@@ -293,8 +293,19 @@ void clic_suppr(GtkWidget* a, Affiche_vol_Window* pf)
                    DBG
                    printf(" Suppr clic_suppr : %ld",btn);
                    btn = btn+1;
+                   DBG
                    pf->client->vols = effacervol(pf->client->vols, btn);
+                   DBG
                    
+                   if (pf->client->ff != 0)
+                   {
+                       
+                       if ( pf->client->ff->points != 0)
+                       { 
+                            DBG
+                            pf->client->ff->points -= 100;                  
+                       }
+                   }        
                    
                 }      
         DBG
