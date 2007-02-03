@@ -60,6 +60,8 @@ void * freet_client ( void * liste)
 void * generic ( void * liste) // 8-)
 {
 
+    free(liste);
+
     return NULL;
 }
 
@@ -184,7 +186,7 @@ if (i == 1 && liste != NULL)  // cas en tête
     free(ptr);
 }
 else if (liste != NULL)
-{    
+{
     DBG
     for (k=1;k<i;k++)
     {
@@ -197,6 +199,6 @@ else if (liste != NULL)
     // effacement de la structure.
     ptr->data = NULL;
     free(ptr);
-}    
+}
 return liste;
 }

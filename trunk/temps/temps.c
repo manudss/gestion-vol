@@ -34,7 +34,7 @@ char * quelheure(ptr_t_temps temps, llist TDH[], ptr_t_vols arbre, llist listeav
     DBG
     if (difjour = difftime(temps->courant,tmp.courant) >= 0 )          // Si on a changer de jour
     {
-        printf("Changement de jour : sauvegarde, vieullez patienter ......\n");
+        printf("Changement de jour : sauvegarde, veuillez patienter ......\n");
 
         DBG
         do
