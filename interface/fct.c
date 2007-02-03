@@ -1,6 +1,37 @@
 #include "../structure.h"
 #include "interface.h"
 #include "../recherche/recherche.h"
+#include "../liste/liste.h"
+
+/////////////////HEURE FCT PRINCIPALE //////////////////////
+void afficheh(MainWindow *a, MainWindow *pf)
+{
+gtk_entry_set_text (pf->pchph, g_locale_to_utf8((const gchar*) quelheure(pf->temps,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination), -1, NULL, NULL, NULL ));
+}
+
+void p1h (MainWindow *a, MainWindow *pf)
+{
+
+gtk_entry_set_text (pf->pchph,ajoutertemps(pf->temps,60*60,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination));
+}
+
+
+void p1j (MainWindow *a, MainWindow *pf)
+{
+gtk_entry_set_text (pf->pchph,ajoutertemps(pf->temps,60*60*24,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination));
+}
+
+void validh (MainWindow *a, MainWindow *pf)
+{
+char * tps;
+long itps;
+tps = recup_chp(pf->pchph);
+itps=atoi(tps);
+ajoutertemps(pf->temps,itps,pf->tabDH,pf->arbrevol,pf->listeavion, pf->destination);
+
+}
+
+//////////////FIN HEURE FCT_PRINCIPALE
 
 void OnDestroy(GtkWidget* widget, gpointer data)
 {
@@ -83,14 +114,14 @@ if (OK==1)
  {
  //
 // gtk_main_quit();
- f_principale(pf->client,pf->arbrevol,pf->tabDH,pf->temps);
+ f_principale(pf->client,pf->arbrevol,pf->tabDH,pf->temps, pf->destination, pf->listeavion);
  gtk_widget_destroy(pf->pWindow);
    
  }
   
 }
 
-////////////////////*******************************////////////////////////////
+////////////////////*************INSCRIRE******************////////////////////////////
 void inscrire(InscrireWindow *pvalider ,InscrireWindow *pf)
 {
 //recup champ dans tablo
@@ -173,7 +204,7 @@ ajout_client(tab, 8 , pf->tabDH);
  
  gtk_widget_destroy(pf->pWindow);
 
-identification(pf->tabDH,pf->arbrevol,pf->temps);
+identification(pf->tabDH,pf->arbrevol,pf->temps,pf->destination,pf->listeavion);
 }
 
 /////////////////CLIC VOLS////////////
@@ -202,9 +233,33 @@ void clic_choix_jour (GtkWidget* a,JourWindow* pf)
     
     gtk_widget_destroy(pf->pWindow);
     btn =gtk_combo_box_get_active(pf->pCombo);
-    
+    printf("\nCHOIX JOUR : temps :%ld",&(pf->temps));
     enregistrement_vols ( pf->client,pf->vol, btn, &(pf->temps));
     
 }
+////////CHOIX suppr ////////////
+void clic_suppr(GtkWidget* a, Affiche_vol_Window* pf)
+{
+    int btn=-1;
+    int i=0;
+    
+    //printf("\npf->pLabel2[%ld]:%s|",btn,pf->pLabel2[1]);
+    gtk_widget_destroy(pf->pWindow);
+    char * codevol;
+    
+    while (btn == -1 && i < pf->nbr)
+    {
+        if(gtk_toggle_button_get_active (pf->pSuppr[i])!=0) btn = i;
+        if (btn != -1)
+                {     
 
+                   DBG
+                   printf(" nb clic_suppr : %ld",btn);
+                   pf->client->vols = effacervol(pf->client->vols, btn);
+                   
+                   
+                }      
+        i++;
+    }
 
+}

@@ -46,7 +46,7 @@ void * recherche(void *  achercher,llist liste, void * (fct_rech) (void* acherch
 		}
 
     }
-
+    printf("non trouve");
     return liste;
 }
 
@@ -122,16 +122,16 @@ void * recherche_dest(void* achercher,void * chercherdans)
     codedest = (char*) achercher;
     puts(codedest);
     dest = (ptr_t_destination) chercherdans;
-    printf("chercherdans : %ld\n", chercherdans);
+    printf("%s chercherdans : %ld\n", codedest, chercherdans);
     //printf("dest : %ld\n", *dest);
     //printf("client : %ld\n", dest);
 
 
     puts(dest->code);
 
-    if (strcmp(codedest , &dest->code) == 0 )
+    if (strcmp(codedest , dest->code) == 0 )
     {
-
+        puts(dest->destination);
         return chercherdans;
     }
     else

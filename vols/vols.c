@@ -14,22 +14,41 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
 
         DBG
     t_temps tmp;
-    char *codevol[100];
+
+
+    char codevol[100];
     char chartabjour[10];
     char *jour= NULL;
     int tabjour;
 
-
+    
     tmp.courant = temps->courant;
     tabjour = (lejour + temps->jour) %31;
+    printf("tabjour : %ld", tabjour);
+    DBG
     vol->jour[tabjour].liste_client = ajouterEnTete(vol->jour[tabjour].liste_client, client->cle);
+    DBG
     vol->jour[tabjour].nbr_client ++;
+    DBG
     strcpy(codevol, vol->code_vol);
     printf("\nJour [enregistrement_vol] :%ld\n",lejour+1);
     jour = date (temps, lejour+1);
+
+
+    DBG
+    itoa(tabjour, chartabjour, 10);
+    DBG
+    strcat(codevol,chartabjour);
+
+    DBG
+
+    DBG
+
     itoa(tabjour, chartabjour, 10);
     strcat(codevol,chartabjour);
+
     strcat(codevol, "  ->  le ");
+    DBG
     strcat(codevol, jour);
     jour = strdup(codevol);
 
@@ -81,18 +100,46 @@ void effacementclientvols(ptr_t_vols arbre)
 
 char * affichevols (llist listedestination, ptr_t_vols levol)
 {
-    char * chaine1=NULL,chaine2=NULL;
+    char * chaine1=NULL;
     char chaine[300]="Vol à destination : ";
-    ptr_t_destination tmp;
-
+    char dest[7];
+    char horaire[6];
+    ptr_t_destination tmp=NULL;
+    printf("--------------------- code destintation -----------------");
+    dest[0] = levol->code_vol[0];
+    dest[1] = levol->code_vol[1];
+    dest[2] = levol->code_vol[2];
+    dest[3] = levol->code_vol[3];
+    dest[4] = levol->code_vol[4];
+    dest[5] = levol->code_vol[5];
+    dest[6] = '\0';
+    horaire[0] = levol->code_vol[6];
+    horaire[1] = levol->code_vol[7];
+    horaire[2] = ':';
+    horaire[3] = levol->code_vol[8];
+    horaire[4] = levol->code_vol[9];
+    horaire[5] = '\0';
+    puts(dest);
     // recherche destination
-    if ( tmp = recherche(levol->dest , listedestination , &recherche_dest) != NULL );   // codedestination variable contenant le code de la destination : (par ex :"lonpar").
-    {                                                                            //listedestination la liste chainée des destinations
+    tmp = recherche(dest , listedestination , &recherche_dest);
+    if (tmp  != NULL )   // codedestination variable contenant le code de la destination : (par ex :"lonpar").
+    {  
+        DBG
+        puts(tmp->destination);  
+        DBG                                                                        //listedestination la liste chainée des destinations
       strcat(chaine, tmp->destination );
-      strcat(chaine, "au départ de " );
+      DBG
+      strcat(chaine, "\t\t Au départ de " );
+      DBG
       strcat(chaine, tmp->origine );
+      DBG
     }
-    strcat(chaine, "\nHoraire :");
-    strcat(chaine, levol->horaire );
-    strcat(chaine, "Numéro du vol : " );
+    strcat(chaine, "\nHoraire :\t");
+    DBG
+    strcat(chaine, horaire );
+    DBG
+    strcat(chaine, "\n\t\t\t\tNuméro du vol : " );
+    DBG
+    chaine1 = strdup(chaine);
+    return chaine1;
 }

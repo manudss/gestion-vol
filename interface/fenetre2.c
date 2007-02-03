@@ -7,12 +7,13 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
 {
     
     Affiche_vol_Window *pf;
-        
+     DBG  
     
     int i=0;
     int cpt;
     int n=0;
     cpt=0;
+    char label[400];
 
     llist ptr;
     
@@ -30,20 +31,20 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     
     printf("[affiche vol ]nom client:");
     puts(pf->client->nom);
-    
-    
     pf->temps = pf1->temps;
+    pf->destination = pf1->destination;
     
     
     ptr = pf->client->vols;
-    
+    DBG
     
     while(ptr!=NULL)
     {
-        printf("i :%ld; ptr->suiv : %ld",i, &ptr->suiv);
+        //printf("i :%ld; ptr->suiv : %ld\n",i, ptr);
         ptr=ptr->suiv;
         DBG
         i++;
+        printf("boucle compte_elt: affiche :%ld",i);
         DBG
     }
     DBG
@@ -74,7 +75,7 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     
     ptr = pf->client->vols;
      // Boucle création table ...
-     
+     DBG
      for (cpt=0;cpt<i;cpt++)
          {
          //Boutons
@@ -82,7 +83,11 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
          
          
          //labels ..
-         pf->pLabel2[i]=gtk_label_new((char *) ptr->data) ;
+         strcpy(label,g_locale_to_utf8((const gchar *) affichevols(pf->destination, ptr->data),-1,NULL,NULL,NULL));
+              DBG
+         strcat(label,ptr->data);
+         
+         pf->pLabel2[i]=gtk_label_new(g_locale_to_utf8((const gchar *) label,-1,NULL,NULL,NULL)) ;
           
             //pf->pLabel2[i]=gtk_label_new("test") ;               
          ptr=ptr->suiv;
@@ -103,19 +108,17 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
          }
     
     
-    
+    DBG
      /*Callbacks: */
-    
+    //printf("\n[AFFICHE]pf->pLabel2[0]:%s|",(pf->pLabel2[0]));
     for(cpt=0; cpt< i; cpt++)
      {
-      //g_signal_connect(G_OBJECT(pf->pSuppr[i]), "clicked", G_CALLBACK(clic),(gpointer*) pf);
+      g_signal_connect(G_OBJECT(pf->pSuppr[i]), "clicked", G_CALLBACK(clic_suppr),(gpointer*) pf);
      }
-    
-     //g_signal_connect(G_OBJECT(pf->pChoix[1]), "clicked", G_CALLBACK(clic),&cpt);
      
      g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
      
-    
+    DBG
     
      /* Affichage de la fenetre */
      gtk_widget_show_all(pf->pWindow);
@@ -148,6 +151,7 @@ int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
     pf->client = pf1->client;
     pf->tabDH = pf1->tabDH;
     pf->vol = vol;
+    DBG
     
     gtk_init(0,0);
 
@@ -162,11 +166,11 @@ int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
     //crea combobox
     pf->pCombo = gtk_combo_box_new_text();
     //pf->pJour = gtk_combo_box_new_text();
-    
+    DBG
     for (k=1;k<=31;k++)
     {
         
-        gtk_combo_box_insert_text((GtkComboBox*) pf->pCombo,k, g_locale_to_utf8((const gchar*) date(&pf->temps,k), -1, NULL, NULL, NULL ));
+        gtk_combo_box_insert_text((GtkComboBox*) pf->pCombo,k, g_locale_to_utf8((const gchar*) date(pf->temps,k), -1, NULL, NULL, NULL ));
     }    
     
     
@@ -181,7 +185,7 @@ int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
     pf->pTable=gtk_table_new(3,2,TRUE);
     gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
 
-
+    DBG
     /*TABLE: Insertion des champs .. */
     //label explication:
     gtk_table_attach(GTK_TABLE(pf->pTable), pf->pLabel,
@@ -205,14 +209,14 @@ int choix_jour(VolsWindow* pf1,ptr_t_vols vol)
     
     //On lance les CALLBACKS :
     
-   
+   DBG
     
     g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
     g_signal_connect(G_OBJECT(pf->pCombo), "changed", G_CALLBACK(clic_choix_jour),(gpointer*) pf);
 
     ///
     /* Affichage de la fenetre */
-    
+    DBG
     gtk_widget_destroy(pf1->pWindow);
     gtk_widget_show_all(pf->pWindow);
 
@@ -242,6 +246,8 @@ pf->tabDH = ptr;
 pf->arbrevol = pf1->arbrevol;
 pf->temps =pf1->temps;
 pf->client = pf1->client;
+pf->destination =pf1->destination;
+pf->listeavion = pf1-> listeavion;
 
 //(pf->tabDH) =(pf1->tabDH);
 printf("DBG inscription \n");
