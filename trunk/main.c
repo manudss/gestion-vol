@@ -39,7 +39,7 @@ int main()
 
 */
 printf("\ntemps : %ld",temps.jour);
- system("pause");
+ //system("pause");
 
 
     // fin temps
@@ -90,7 +90,7 @@ printf("\ntemps : %ld",temps.jour);
     //identification ((llist**)listeclient);
     
     printf("MAIN :temps %ld",&temps);
-    system("pause");
+    //system("pause");
     identification ((llist**)listeclient, arbrevol,&temps,listedestination,listeavion);
 
     puts( quelheure(&temps, listeclient, arbrevol,listeavion, listedestination) );
