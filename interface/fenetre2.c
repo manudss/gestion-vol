@@ -16,9 +16,7 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     char label[400];
 
     llist ptr;
-    
-
-    
+    DBG
     printf("\nENTREE DANS AFFICHE VOL\n");
     pf = (Affiche_vol_Window*)g_malloc(sizeof(Affiche_vol_Window));
     
@@ -44,11 +42,11 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
         ptr=ptr->suiv;
         DBG
         i++;
-        printf("boucle compte_elt: affiche :%ld",i);
+        printf("\nboucle compte_elt: affiche :%ld\n",i);
         DBG
     }
     DBG
-        
+    pf->nbr=i;
     
     
     pf->pSuppr = (GtkWidget**)g_malloc(sizeof(GtkWidget)* i);
@@ -64,44 +62,44 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 660, 530);
     //gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
     gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : Vos vols reservés");
-    //pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
+    pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
     
-    //gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
+    gtk_container_add(GTK_CONTAINER(pf->pWindow),pf->pScrollbar);
     
      /* Creation et insertion de la table */
      pf->pTable = gtk_table_new(i,5,FALSE);
      gtk_container_add(GTK_CONTAINER(pf->pWindow), GTK_WIDGET(pf->pTable));
-     //gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pf->pScrollbar), pf->pTable);
+     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(pf->pScrollbar), pf->pTable);
     
     ptr = pf->client->vols;
      // Boucle création table ...
      DBG
-     for (cpt=0;cpt<i;cpt++)
+     for (cpt=0;cpt<pf->nbr;cpt++)
          {
          //Boutons
-         pf->pSuppr[i] = gtk_toggle_button_new_with_label("Supprimer");
+         pf->pSuppr[cpt] = gtk_toggle_button_new_with_label("Supprimer");
          
          
          //labels ..
          strcpy(label,g_locale_to_utf8((const gchar *) affichevols(pf->destination, ptr->data),-1,NULL,NULL,NULL));
               DBG
          strcat(label,ptr->data);
-         
-         pf->pLabel2[i]=gtk_label_new(g_locale_to_utf8((const gchar *) label,-1,NULL,NULL,NULL)) ;
-          
+           DBG
+         pf->pLabel2[cpt]=gtk_label_new(g_locale_to_utf8((const gchar *) label,-1,NULL,NULL,NULL)) ;
+          DBG
             //pf->pLabel2[i]=gtk_label_new("test") ;               
          ptr=ptr->suiv;
-    
+             DBG
          /*label: vol*/
-         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel2[i],
+         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pLabel2[cpt],
          0, 4, cpt, cpt+1,
-         GTK_EXPAND | GTK_FILL,GTK_EXPAND | GTK_FILL,
+         GTK_EXPAND | GTK_FILL,0,
                0, 0);
     
          // bouton reservation vol
-         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pSuppr[i],
+         gtk_table_attach(GTK_TABLE(pf->pTable),pf->pSuppr[cpt],
          4, 5, cpt, cpt+1,
-         GTK_EXPAND | GTK_FILL , GTK_EXPAND | GTK_FILL,
+         GTK_EXPAND | GTK_FILL , 0,
                 15, 25);
     
     
@@ -111,9 +109,11 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     DBG
      /*Callbacks: */
     //printf("\n[AFFICHE]pf->pLabel2[0]:%s|",(pf->pLabel2[0]));
-    for(cpt=0; cpt< i; cpt++)
+    for(cpt=0; cpt< pf->nbr; cpt++)
      {
-      g_signal_connect(G_OBJECT(pf->pSuppr[i]), "clicked", G_CALLBACK(clic_suppr),(gpointer*) pf);
+      g_signal_connect(G_OBJECT(pf->pSuppr[cpt]), "clicked", G_CALLBACK(clic_suppr),(gpointer*) pf);
+      DBG
+      printf("\ncallback suppr_vols :%ld",cpt);   
      }
      
      g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
@@ -406,7 +406,7 @@ gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : INSCRIPTION");
  /*Callbacks: */
  g_signal_connect(G_OBJECT(pf->pWindow), "destroy", G_CALLBACK(OnDestroy),0);
  g_signal_connect(G_OBJECT(pf->pvalider), "clicked", G_CALLBACK(inscrire),(gpointer*) pf);
-
+ //g_signal_connect(G_OBJECT(pf->pvalider), "activate", G_CALLBACK(inscription_info), (GtkWidget*) pf->pWindow);
  /* Affichage de la fenetre */
  gtk_widget_destroy(pf1->pWindow); //destruction fenetre parent
  gtk_widget_show_all(pf->pWindow);

@@ -226,6 +226,8 @@ int choix_jour(VolsWindow* pf1,ptr_t_vols vol);//fenetre
 void clic_choix_jour (GtkWidget* a,JourWindow* pf);//fct
 void affiche_vols(MainWindow* a, MainWindow* pf1); //fenetre
 void clic_suppr(GtkWidget* a, Affiche_vol_Window* pf); //fct
+
+void inscription_info(GtkWidget *pBtn, gpointer pf);
 //heures
 void afficheh(MainWindow *a, MainWindow *pf); //fct
 void p1h (MainWindow *a, MainWindow *pf);//fct
