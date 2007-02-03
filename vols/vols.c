@@ -53,6 +53,11 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
     DBG
     //strcat(codevol, jour);
     jour = strdup(codevol);
+    
+    if (client->ff != NULL)  // si le client est frequent flyer
+    {
+        client->ff->points += 100;
+    }    
 
     client->vols = ajouterEnTete(client->vols, jour);
 

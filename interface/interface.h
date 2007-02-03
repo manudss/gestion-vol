@@ -35,6 +35,7 @@ typedef struct _MainWindow
 {
     int sec;
     
+    
     //Widget
     GtkWidget *pTable;//table
     GtkWidget *pWindow;//FENETRE
@@ -105,6 +106,8 @@ typedef struct _vols
 {
 int i;
 int nbr;
+
+
 GtkWidget *pWindow;//FENETRE
 //GtkScrolledWindow *pSWindow;
 
@@ -233,6 +236,8 @@ void afficheh(MainWindow *a, MainWindow *pf); //fct
 void p1h (MainWindow *a, MainWindow *pf);//fct
 void p1j (MainWindow *a, MainWindow *pf); //fct
 void validh (MainWindow *a, MainWindow *pf); //fct
+
+void WFF(GtkWidget *a, MainWindow* pf);
 
 //GtkWidget* affiche_vol(GtkWidget*);
 
