@@ -94,6 +94,7 @@ printf("\ntemps : %ld",temps.jour);
     identification ((llist**)listeclient, arbrevol,&temps,listedestination,listeavion);
 
     puts( quelheure(&temps, listeclient, arbrevol,listeavion, listedestination) );
+    enregistrement(listeclient);
 
 	return 0;
 }
