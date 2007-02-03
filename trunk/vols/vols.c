@@ -1,7 +1,8 @@
 #include <math.h>
 #include "../structure.h"
 #include "../recherche/recherche.h"
-
+#include "../vols/vols.h"
+#include "../liste/liste.h"
 
 // adresse de la case d'un client
 // adresse de la case d'un vols
@@ -21,9 +22,10 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
     char *jour= NULL;
     int tabjour;
 
-    
+
     tmp.courant = temps->courant;
     tabjour = (lejour + temps->jour) %31;
+
     printf("tabjour : %ld", tabjour);
     DBG
     vol->jour[tabjour].liste_client = ajouterEnTete(vol->jour[tabjour].liste_client, client->cle);
@@ -31,8 +33,8 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
     vol->jour[tabjour].nbr_client ++;
     DBG
     strcpy(codevol, vol->code_vol);
-    printf("\nJour [enregistrement_vol] :%ld\n",lejour+1);
-    jour = date (temps, lejour+1);
+    //printf("\nJour [enregistrement_vol] :%ld\n", temps->jour + lejour);
+    //jour = date (temps, (temps->jour + lejour)%31);
 
 
     DBG
@@ -44,12 +46,12 @@ int enregistrement_vols ( ptr_t_client client, ptr_t_vols vol, int lejour, ptr_t
 
     DBG
 
-    itoa(tabjour, chartabjour, 10);
+    itoa(lejour+1, chartabjour, 10);
     strcat(codevol,chartabjour);
 
-    strcat(codevol, "  ->  le ");
+    //strcat(codevol, "  ->  le ");
     DBG
-    strcat(codevol, jour);
+    //strcat(codevol, jour);
     jour = strdup(codevol);
 
     client->vols = ajouterEnTete(client->vols, jour);
@@ -63,18 +65,24 @@ void effacementjour (ptr_t_vols vol, ptr_t_temps temps , ptr_t_client TDH[])
 {
     char *cle;
     ptr_t_vols ptrvol;
+    element *tmp;
+
 
     //ptrvol
     if( vol != NULL)
 	 {
 		effacementjour(vol->fg, temps, TDH);
-        //effacementvolsclient(TDH,  ); // effacement dans la liste des vols en cours du client
-        //effacement de la liste entière
-        //vol->jour[temps->jour] = effacerListe(lvol->jour[temps->jour], &generic)
+         tmp = (llist) vol->jour[(temps->jour -1 )%31].liste_client;
+        while(tmp != NULL)
+        {
+            effacementvolsclient(TDH[hachage((char *) tmp->data)], (char *) tmp->data); // effacement dans la liste des vols en cours du client
+            tmp = tmp->suiv;
+        }
+        vol->jour[temps->jour].liste_client = effacerListe(vol->jour[temps->jour].liste_client, &generic);
 		effacementjour(vol->fd, temps, TDH);
 
 	 }
-    //while (ptrvol->jour
+
 
 }
 
@@ -82,14 +90,22 @@ void effacementjour (ptr_t_vols vol, ptr_t_temps temps , ptr_t_client TDH[])
 void effacementvolsclient(ptr_t_client client, char * code)
 {
 
-    effacerelmt(client->vols, code);
-
-    if (client->ff != NULL) // si il le client est fréquent Flyer
+    element *tmp;
+	tmp = (element *) client;
+    printf("afficher liste");
+    DBG
+    while(tmp != NULL)
     {
-        client->ff->vols = ajouterEnTete(client->ff->vols, code);
-        // mise à jour du client
+        effacerelmt(client->vols, code);
 
+        if (client->ff != NULL) // si il le client est fréquent Flyer
+        {
+            client->ff->vols = ajouterEnTete(client->ff->vols, code);
+            // mise à jour du client
+        }
+        tmp = tmp->suiv;
     }
+
 
 }
 
@@ -123,9 +139,9 @@ char * affichevols (llist listedestination, ptr_t_vols levol)
     // recherche destination
     tmp = recherche(dest , listedestination , &recherche_dest);
     if (tmp  != NULL )   // codedestination variable contenant le code de la destination : (par ex :"lonpar").
-    {  
+    {
         DBG
-        puts(tmp->destination);  
+        puts(tmp->destination);
         DBG                                                                        //listedestination la liste chainée des destinations
       strcat(chaine, tmp->destination );
       DBG
