@@ -42,7 +42,7 @@ char * quelheure(ptr_t_temps temps, llist TDH[], ptr_t_vols arbre, llist listeav
         do
         {
             temps->jour = (temps->jour + 1) % 31;
-            effacementjour (arbre, temps , TDH);
+            //effacementjour (arbre, temps , TDH);
             //effacementvolsclient( ); // effacement dans la liste des vols en cours du client
             difjour = difjour - 60*60*24;
         }
