@@ -58,8 +58,8 @@ void affiche_vols(MainWindow* a, MainWindow* pf1)
     //gtk_scrolled_window_add_with_viewport((GtkScrolledWindow*)pf->pWindow,pf->pTable);
     
     gtk_window_set_position(GTK_WINDOW(pf->pWindow), GTK_WIN_POS_CENTER);
-    gtk_window_move(GTK_WINDOW(pf->pWindow), 300, 300);
-    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 660, 530);
+    gtk_window_move(GTK_WINDOW(pf->pWindow), 300, 230);
+    gtk_window_set_default_size(GTK_WINDOW(pf->pWindow), 660, 470);
     //gtk_window_set_resizable((GtkWindow*)pf->pWindow,FALSE);
     gtk_window_set_title(GTK_WINDOW(pf->pWindow), "AIR-EFREI : Vos vols reservés");
     pf->pScrollbar = gtk_scrolled_window_new(NULL, NULL);
